@@ -1,0 +1,39 @@
+# Dependencies
+/vendor/
+/node_modules/
+/admin/node_modules/
+
+# Build artifacts
+/admin/build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+debug.log
+
+# Composer
+composer.lock
+
+# NPM
+package-lock.json
+
+# PHPUnit
+.phpunit.result.cache
+/coverage/
+
+# WordPress
+wp-config.php
