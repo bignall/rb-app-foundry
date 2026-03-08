@@ -35,5 +35,9 @@ package-lock.json
 .phpunit.result.cache
 /coverage/
 
+# Build output
+/dist/
+/vendor/
+
 # WordPress
 wp-config.php

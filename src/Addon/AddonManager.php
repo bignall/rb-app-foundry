@@ -26,6 +26,13 @@ class AddonManager
     private array $addons = [];
 
     /**
+     * Additional add-on directories registered by dependent plugins.
+     *
+     * @var string[]
+     */
+    private array $paths = [];
+
+    /**
      * IDs of currently active add-ons.
      *
      * @var string[]
@@ -44,27 +51,43 @@ class AddonManager
     }
 
     /**
-     * Discover all available add-ons in the addons/ directory.
+     * Register an additional directory to scan for add-ons.
+     *
+     * Call this before discover() runs (i.e., on or before plugins_loaded)
+     * to include add-ons from dependent plugins such as SocialPillar.
+     *
+     * @param string $path Absolute path to an addons/ directory.
+     */
+    public function addPath(string $path): void
+    {
+        $this->paths[] = trailingslashit($path);
+    }
+
+    /**
+     * Discover all available add-ons across all registered directories.
      *
      * Scans for directories containing an addon.json and a PHP class
      * that implements AddonInterface.
      */
     public function discover(): void
     {
-        $addonsPath = $this->plugin->getAddonsPath();
+        // Always include PluginForge's own addons/ directory first.
+        $allPaths = array_merge([$this->plugin->getAddonsPath()], $this->paths);
 
-        if (!is_dir($addonsPath)) {
-            return;
-        }
+        foreach ($allPaths as $addonsPath) {
+            if (!is_dir($addonsPath)) {
+                continue;
+            }
 
-        $directories = glob($addonsPath . '*', GLOB_ONLYDIR);
+            $directories = glob($addonsPath . '*', GLOB_ONLYDIR);
 
-        if ($directories === false) {
-            return;
-        }
+            if ($directories === false) {
+                continue;
+            }
 
-        foreach ($directories as $dir) {
-            $this->loadAddon($dir);
+            foreach ($directories as $dir) {
+                $this->loadAddon($dir);
+            }
         }
 
         // Handle first-time installation: activate default add-ons.

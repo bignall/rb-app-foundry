@@ -114,7 +114,10 @@ const App = () => {
         return (
           <Addons
             addons={addons}
-            onRefresh={refreshAddons}
+            onRefresh={async () => {
+              await refreshAddons();
+              await refreshConnections();
+            }}
           />
         );
       case 'connections':

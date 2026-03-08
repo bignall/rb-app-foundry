@@ -69,9 +69,11 @@ final class Plugin
         $this->connectionManager = new ConnectionManager();
         $this->addonManager = new AddonManager($this);
 
-        // Discover and boot active add-ons.
-        $this->addonManager->discover();
-        $this->addonManager->bootActive();
+        // Defer add-on discovery and booting to init so dependent plugins
+        // (e.g. SocialPillar) can register their add-on paths first during
+        // their own plugins_loaded callback (which runs after ours at priority 20).
+        add_action('init', [$this->addonManager, 'discover'], 0);
+        add_action('init', [$this->addonManager, 'bootActive'], 1);
 
         // Initialize admin if in admin context.
         if (is_admin()) {
