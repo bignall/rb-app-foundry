@@ -81,6 +81,31 @@ class RestAPI
             'permission_callback' => [$this, 'checkAdminPermission'],
         ]);
 
+        register_rest_route(self::NAMESPACE, '/connections/(?P<id>[a-z0-9_-]+)/credentials', [
+            [
+                'methods'             => WP_REST_Server::CREATABLE,
+                'callback'            => [$this, 'saveCredentials'],
+                'permission_callback' => [$this, 'checkAdminPermission'],
+                'args'                => [
+                    'id' => [
+                        'required'          => true,
+                        'validate_callback' => fn($param) => is_string($param) && !empty($param),
+                    ],
+                ],
+            ],
+            [
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => [$this, 'deleteCredentials'],
+                'permission_callback' => [$this, 'checkAdminPermission'],
+                'args'                => [
+                    'id' => [
+                        'required'          => true,
+                        'validate_callback' => fn($param) => is_string($param) && !empty($param),
+                    ],
+                ],
+            ],
+        ]);
+
         // Health check.
         register_rest_route(self::NAMESPACE, '/health', [
             'methods'             => WP_REST_Server::READABLE,
@@ -219,6 +244,59 @@ class RestAPI
     {
         $summary = $this->plugin->getConnectionManager()->getSummary();
         return new WP_REST_Response($summary);
+    }
+
+    /**
+     * Save credentials for a connection.
+     *
+     * Calls the connection's authenticate() method, which validates and
+     * stores the credentials (encrypted). Returns the updated connection status.
+     */
+    public function saveCredentials(WP_REST_Request $request): WP_REST_Response
+    {
+        $id = $request->get_param('id');
+        $connection = $this->plugin->getConnectionManager()->get($id);
+
+        if (!$connection) {
+            return new WP_REST_Response(['error' => 'Connection not found.'], 404);
+        }
+
+        $credentials = $request->get_json_params();
+
+        if (empty($credentials) || !is_array($credentials)) {
+            return new WP_REST_Response(['error' => 'No credentials provided.'], 400);
+        }
+
+        $success = $connection->authenticate($credentials);
+
+        if (!$success) {
+            return new WP_REST_Response(
+                ['error' => 'Failed to authenticate. Check your credentials and try again.'],
+                422
+            );
+        }
+
+        return new WP_REST_Response([
+            'success'   => true,
+            'connected' => $connection->isConnected(),
+        ]);
+    }
+
+    /**
+     * Disconnect a connection and delete its stored credentials.
+     */
+    public function deleteCredentials(WP_REST_Request $request): WP_REST_Response
+    {
+        $id = $request->get_param('id');
+        $connection = $this->plugin->getConnectionManager()->get($id);
+
+        if (!$connection) {
+            return new WP_REST_Response(['error' => 'Connection not found.'], 404);
+        }
+
+        $connection->disconnect();
+
+        return new WP_REST_Response(['success' => true, 'connected' => false]);
     }
 
     /**
