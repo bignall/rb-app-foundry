@@ -252,28 +252,29 @@ class RestAPI
      * Calls the connection's authenticate() method, which validates and
      * stores the credentials (encrypted). Returns the updated connection status.
      */
-    public function saveCredentials(WP_REST_Request $request): WP_REST_Response
+    public function saveCredentials(WP_REST_Request $request): WP_REST_Response|\WP_Error
     {
         $id = $request->get_param('id');
         $connection = $this->plugin->getConnectionManager()->get($id);
 
         if (!$connection) {
-            return new WP_REST_Response(['error' => 'Connection not found.'], 404);
+            return new \WP_Error('not_found', 'Connection not found.', ['status' => 404]);
         }
 
         $credentials = $request->get_json_params();
 
         if (empty($credentials) || !is_array($credentials)) {
-            return new WP_REST_Response(['error' => 'No credentials provided.'], 400);
+            return new \WP_Error('bad_request', 'No credentials provided.', ['status' => 400]);
         }
 
         $success = $connection->authenticate($credentials);
 
         if (!$success) {
-            return new WP_REST_Response(
-                ['error' => 'Failed to authenticate. Check your credentials and try again.'],
-                422
-            );
+            $detail = method_exists($connection, 'getLastError') ? $connection->getLastError() : null;
+            $message = $detail
+                ? "Authentication failed: {$detail}"
+                : 'Failed to authenticate. Check your credentials and try again.';
+            return new \WP_Error('auth_failed', $message, ['status' => 422]);
         }
 
         return new WP_REST_Response([
@@ -285,13 +286,13 @@ class RestAPI
     /**
      * Disconnect a connection and delete its stored credentials.
      */
-    public function deleteCredentials(WP_REST_Request $request): WP_REST_Response
+    public function deleteCredentials(WP_REST_Request $request): WP_REST_Response|\WP_Error
     {
         $id = $request->get_param('id');
         $connection = $this->plugin->getConnectionManager()->get($id);
 
         if (!$connection) {
-            return new WP_REST_Response(['error' => 'Connection not found.'], 404);
+            return new \WP_Error('not_found', 'Connection not found.', ['status' => 404]);
         }
 
         $connection->disconnect();

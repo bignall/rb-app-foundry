@@ -29,6 +29,19 @@ abstract class ConnectionAbstract implements ConnectionInterface
     private ?array $cachedCredentials = null;
 
     /**
+     * Last error message from authenticate(), for surfacing to the REST API.
+     */
+    protected ?string $lastError = null;
+
+    /**
+     * Get the last authentication error message, if any.
+     */
+    public function getLastError(): ?string
+    {
+        return $this->lastError;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isConnected(): bool
