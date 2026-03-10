@@ -94,31 +94,35 @@ const CredentialsForm = ({ connection, onSaved, onCancel }) => {
  * Single connection card — handles all three states.
  */
 const ConnectionCard = ({ connection, onRefresh }) => {
-  const [mode, setMode]             = useState('view'); // 'view' | 'edit_credentials'
-  const [disconnecting, setDisconnecting] = useState(false);
-  const [oauthLoading, setOauthLoading]   = useState(false);
-  const [notice, setNotice]         = useState(null);
+  const [mode, setMode]                       = useState('view'); // 'view' | 'edit_credentials'
+  const [disconnecting, setDisconnecting]     = useState(false);
+  const [disconnectingAll, setDisconnectingAll] = useState(false);
+  const [removingAccount, setRemovingAccount] = useState(null); // accountId being removed
+  const [oauthLoading, setOauthLoading]       = useState(false);
+  const [notice, setNotice]                   = useState(null);
 
   // Show oauth_success / oauth_error from URL params (after Facebook redirect).
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const success = params.get('oauth_success');
-    const error   = params.get('oauth_error');
+    const success         = params.get('oauth_success');
+    const error           = params.get('oauth_error');
+    const oauthConnection = params.get('oauth_connection');
     if (success && success === connection.name) {
       setNotice({ status: 'success', message: `${success} connected successfully.` });
       // Clean up URL params.
       const url = new URL(window.location.href);
       url.searchParams.delete('oauth_success');
       window.history.replaceState({}, '', url.toString());
-    } else if (error) {
+    } else if (error && (!oauthConnection || oauthConnection === connection.id)) {
       setNotice({ status: 'error', message: `OAuth failed: ${error}` });
       const url = new URL(window.location.href);
       url.searchParams.delete('oauth_error');
+      url.searchParams.delete('oauth_connection');
       window.history.replaceState({}, '', url.toString());
     }
   }, []);
 
-  const handleDisconnect = async () => {
+  const handleRemoveConnection = async () => {
     setDisconnecting(true);
     setNotice(null);
     try {
@@ -126,12 +130,43 @@ const ConnectionCard = ({ connection, onRefresh }) => {
         path: `/pluginforge/v1/connections/${connection.id}/credentials`,
         method: 'DELETE',
       });
-      setNotice({ status: 'success', message: __('Disconnected.', 'pluginforge') });
       await onRefresh();
     } catch (err) {
-      setNotice({ status: 'error', message: err.message || __('Failed to disconnect.', 'pluginforge') });
+      setNotice({ status: 'error', message: err.message || __('Failed to remove connection.', 'pluginforge') });
     } finally {
       setDisconnecting(false);
+    }
+  };
+
+  const handleDisconnectAll = async () => {
+    setDisconnectingAll(true);
+    setNotice(null);
+    try {
+      await apiFetch({
+        path: `/pluginforge/v1/connections/${connection.id}/accounts`,
+        method: 'DELETE',
+      });
+      await onRefresh();
+    } catch (err) {
+      setNotice({ status: 'error', message: err.message || __('Failed to disconnect accounts.', 'pluginforge') });
+    } finally {
+      setDisconnectingAll(false);
+    }
+  };
+
+  const handleRemoveAccount = async (accountId) => {
+    setRemovingAccount(accountId);
+    setNotice(null);
+    try {
+      await apiFetch({
+        path: `/pluginforge/v1/connections/${connection.id}/accounts/${accountId}`,
+        method: 'DELETE',
+      });
+      await onRefresh();
+    } catch (err) {
+      setNotice({ status: 'error', message: err.message || __('Failed to remove account.', 'pluginforge') });
+    } finally {
+      setRemovingAccount(null);
     }
   };
 
@@ -149,7 +184,7 @@ const ConnectionCard = ({ connection, onRefresh }) => {
     }
   };
 
-  const isOAuth = connection.auth_type === 'OAuth2';
+  const isOAuth = connection.auth_type === 'oauth2';
 
   // Determine what body to render.
   const renderBody = () => {
@@ -180,18 +215,13 @@ const ConnectionCard = ({ connection, onRefresh }) => {
       return (
         <div className="pluginforge-connection-oauth">
           <p className="pluginforge-connection-hint">
-            {__('App credentials saved. Authorize with Facebook to complete the connection.', 'pluginforge')}
+            {__('App credentials saved. Connect a Facebook account to complete the setup.', 'pluginforge')}
           </p>
           <div className="pluginforge-connection-actions">
-            <Button
-              variant="primary"
-              isBusy={oauthLoading}
-              disabled={oauthLoading}
-              onClick={handleOAuth}
-            >
-              {oauthLoading ? <Spinner /> : __('Connect with Facebook', 'pluginforge')}
+            <Button variant="primary" isBusy={oauthLoading} disabled={oauthLoading} onClick={handleOAuth}>
+              {oauthLoading ? <Spinner /> : __('Connect Facebook Account', 'pluginforge')}
             </Button>
-            <Button variant="tertiary" isSmall onClick={() => setMode('edit_credentials')}>
+            <Button variant="tertiary" onClick={() => setMode('edit_credentials')}>
               {__('Update App Credentials', 'pluginforge')}
             </Button>
           </div>
@@ -199,27 +229,59 @@ const ConnectionCard = ({ connection, onRefresh }) => {
       );
     }
 
-    // Connected.
+    // Connected — show account list.
+    const accounts = connection.accounts || [];
     return (
-      <div className="pluginforge-connection-actions">
-        {isOAuth && (
-          <Button variant="secondary" isSmall onClick={handleOAuth} isBusy={oauthLoading} disabled={oauthLoading}>
-            {__('Re-authorize', 'pluginforge')}
+      <div className="pluginforge-connection-connected">
+        <ul className="pluginforge-accounts-list">
+          {accounts.map((account) => (
+            <li key={account.id} className="pluginforge-account-item">
+              <span className="pluginforge-account-info">
+                <strong>{account.name}</strong>
+                <span className="pluginforge-account-pages">
+                  {account.page_count} {account.page_count === 1
+                    ? __('page', 'pluginforge')
+                    : __('pages', 'pluginforge')}
+                </span>
+              </span>
+              <Button
+                variant="link"
+                isDestructive
+                isBusy={removingAccount === account.id}
+                disabled={!!removingAccount || disconnectingAll}
+                onClick={() => handleRemoveAccount(account.id)}
+              >
+                {__('Remove', 'pluginforge')}
+              </Button>
+            </li>
+          ))}
+        </ul>
+        <div className="pluginforge-connection-actions">
+          <Button variant="primary" isBusy={oauthLoading} disabled={oauthLoading || !!removingAccount} onClick={handleOAuth}>
+            {oauthLoading ? <Spinner /> : __('Add Account', 'pluginforge')}
           </Button>
-        )}
-        <Button variant="secondary" isSmall onClick={() => setMode('edit_credentials')}>
-          {__('Update Credentials', 'pluginforge')}
-        </Button>
-        <Button
-          variant="link"
-          isDestructive
-          isSmall
-          isBusy={disconnecting}
-          disabled={disconnecting}
-          onClick={handleDisconnect}
-        >
-          {disconnecting ? <Spinner /> : __('Disconnect', 'pluginforge')}
-        </Button>
+          <Button variant="secondary" onClick={() => setMode('edit_credentials')} disabled={!!removingAccount}>
+            {__('Update App Credentials', 'pluginforge')}
+          </Button>
+          <Button
+            variant="link"
+            isDestructive
+            isBusy={disconnectingAll}
+            disabled={disconnectingAll || !!removingAccount}
+            onClick={handleDisconnectAll}
+          >
+            {__('Disconnect All Accounts', 'pluginforge')}
+          </Button>
+          <Button
+            variant="link"
+            isDestructive
+            isBusy={disconnecting}
+            disabled={disconnecting || !!removingAccount || disconnectingAll}
+            onClick={handleRemoveConnection}
+          >
+            {__('Remove Connection', 'pluginforge')}
+          </Button>
+        </div>
       </div>
     );
   };
@@ -232,7 +294,9 @@ const ConnectionCard = ({ connection, onRefresh }) => {
           <span className={`pluginforge-connection-status ${connection.connected ? 'connected' : 'disconnected'}`}>
             <Dashicon icon={connection.connected ? 'yes-alt' : 'dismiss'} />
             {connection.connected
-              ? __('Connected', 'pluginforge')
+              ? connection.accounts?.length > 1
+                ? `${connection.accounts.length} ${__('accounts', 'pluginforge')}`
+                : __('Connected', 'pluginforge')
               : isOAuth && connection.app_configured
                 ? __('Awaiting Authorization', 'pluginforge')
                 : __('Not Connected', 'pluginforge')}

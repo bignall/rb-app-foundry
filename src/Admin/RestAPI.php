@@ -131,6 +131,35 @@ class RestAPI
             ],
         ]);
 
+        // Per-connection account management endpoints.
+        register_rest_route(self::NAMESPACE, '/connections/(?P<id>[a-z0-9_-]+)/accounts', [
+            'methods'             => WP_REST_Server::DELETABLE,
+            'callback'            => [$this, 'disconnectAccounts'],
+            'permission_callback' => [$this, 'checkAdminPermission'],
+            'args'                => [
+                'id' => [
+                    'required'          => true,
+                    'validate_callback' => fn($param) => is_string($param) && !empty($param),
+                ],
+            ],
+        ]);
+
+        register_rest_route(self::NAMESPACE, '/connections/(?P<id>[a-z0-9_-]+)/accounts/(?P<accountId>[a-z0-9_-]+)', [
+            'methods'             => WP_REST_Server::DELETABLE,
+            'callback'            => [$this, 'removeAccount'],
+            'permission_callback' => [$this, 'checkAdminPermission'],
+            'args'                => [
+                'id'        => [
+                    'required'          => true,
+                    'validate_callback' => fn($param) => is_string($param) && !empty($param),
+                ],
+                'accountId' => [
+                    'required'          => true,
+                    'validate_callback' => fn($param) => is_string($param) && !empty($param),
+                ],
+            ],
+        ]);
+
         // Health check.
         register_rest_route(self::NAMESPACE, '/health', [
             'methods'             => WP_REST_Server::READABLE,
@@ -326,6 +355,54 @@ class RestAPI
     }
 
     /**
+     * Disconnect all user accounts for an OAuth connection, keeping the app credentials.
+     *
+     * After this, the connection returns to the "app configured, awaiting OAuth" state.
+     */
+    public function disconnectAccounts(WP_REST_Request $request): WP_REST_Response|\WP_Error
+    {
+        $id         = $request->get_param('id');
+        $connection = $this->plugin->getConnectionManager()->get($id);
+
+        if (!$connection) {
+            return new \WP_Error('not_found', 'Connection not found.', ['status' => 404]);
+        }
+
+        if (!method_exists($connection, 'disconnectAccounts')) {
+            return new \WP_Error('not_supported', 'This connection does not support multi-account management.', ['status' => 400]);
+        }
+
+        $connection->disconnectAccounts();
+
+        return new WP_REST_Response(['success' => true, 'connected' => false]);
+    }
+
+    /**
+     * Remove a single connected account from an OAuth connection.
+     */
+    public function removeAccount(WP_REST_Request $request): WP_REST_Response|\WP_Error
+    {
+        $id        = $request->get_param('id');
+        $accountId = $request->get_param('accountId');
+        $connection = $this->plugin->getConnectionManager()->get($id);
+
+        if (!$connection) {
+            return new \WP_Error('not_found', 'Connection not found.', ['status' => 404]);
+        }
+
+        if (!method_exists($connection, 'removeAccount')) {
+            return new \WP_Error('not_supported', 'This connection does not support multi-account management.', ['status' => 400]);
+        }
+
+        $connection->removeAccount($accountId);
+
+        return new WP_REST_Response([
+            'success'  => true,
+            'connected' => $connection->isConnected(),
+        ]);
+    }
+
+    /**
      * Get the OAuth authorization URL for an OAuth2 connection.
      *
      * The redirect_uri points back to this plugin's oauth-callback endpoint.
@@ -372,13 +449,13 @@ class RestAPI
         $connection = $this->plugin->getConnectionManager()->get($id);
 
         if (!$connection || !method_exists($connection, 'handleCallback')) {
-            wp_redirect($adminUrl . '&oauth_error=' . urlencode('Connection not found.'));
+            wp_redirect($adminUrl . '&oauth_error=' . urlencode('Connection not found.') . '&oauth_connection=' . urlencode($id));
             exit;
         }
 
         if (empty($code)) {
             $error = $request->get_param('error_description') ?? $request->get_param('error') ?? 'Authorization was denied.';
-            wp_redirect($adminUrl . '&oauth_error=' . urlencode($error));
+            wp_redirect($adminUrl . '&oauth_error=' . urlencode($error) . '&oauth_connection=' . urlencode($id));
             exit;
         }
 
@@ -387,7 +464,7 @@ class RestAPI
 
         if (empty($result['success'])) {
             $error = $result['error'] ?? 'OAuth flow failed.';
-            wp_redirect($adminUrl . '&oauth_error=' . urlencode($error));
+            wp_redirect($adminUrl . '&oauth_error=' . urlencode($error) . '&oauth_connection=' . urlencode($id));
             exit;
         }
 
