@@ -113,11 +113,14 @@ class ConnectionManager
         $summary = [];
         foreach ($this->connections as $id => $connection) {
             $summary[$id] = [
-                'id'          => $id,
-                'name'        => $connection->getName(),
-                'connected'   => $connection->isConnected(),
-                'auth_type'   => $connection->getAuthType()->value,
-                'auth_fields' => $connection->getAuthFields(),
+                'id'            => $id,
+                'name'          => $connection->getName(),
+                'connected'     => $connection->isConnected(),
+                'auth_type'     => $connection->getAuthType()->value,
+                'auth_fields'   => $connection->getAuthFields(),
+                'app_configured' => method_exists($connection, 'isAppConfigured')
+                    ? $connection->isAppConfigured()
+                    : null,
             ];
         }
         return $summary;

@@ -106,6 +106,31 @@ class RestAPI
             ],
         ]);
 
+        // OAuth endpoints (for OAuth2 connections like Facebook).
+        register_rest_route(self::NAMESPACE, '/connections/(?P<id>[a-z0-9_-]+)/oauth-url', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [$this, 'getOAuthUrl'],
+            'permission_callback' => [$this, 'checkAdminPermission'],
+            'args'                => [
+                'id' => [
+                    'required'          => true,
+                    'validate_callback' => fn($param) => is_string($param) && !empty($param),
+                ],
+            ],
+        ]);
+
+        register_rest_route(self::NAMESPACE, '/connections/(?P<id>[a-z0-9_-]+)/oauth-callback', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [$this, 'handleOAuthCallback'],
+            'permission_callback' => '__return_true', // Must be public — Facebook redirects here.
+            'args'                => [
+                'id' => [
+                    'required'          => true,
+                    'validate_callback' => fn($param) => is_string($param) && !empty($param),
+                ],
+            ],
+        ]);
+
         // Health check.
         register_rest_route(self::NAMESPACE, '/health', [
             'methods'             => WP_REST_Server::READABLE,
@@ -298,6 +323,79 @@ class RestAPI
         $connection->disconnect();
 
         return new WP_REST_Response(['success' => true, 'connected' => false]);
+    }
+
+    /**
+     * Get the OAuth authorization URL for an OAuth2 connection.
+     *
+     * The redirect_uri points back to this plugin's oauth-callback endpoint.
+     */
+    public function getOAuthUrl(WP_REST_Request $request): WP_REST_Response|\WP_Error
+    {
+        $id = $request->get_param('id');
+        $connection = $this->plugin->getConnectionManager()->get($id);
+
+        if (!$connection) {
+            return new \WP_Error('not_found', 'Connection not found.', ['status' => 404]);
+        }
+
+        if (!method_exists($connection, 'getOAuthUrl')) {
+            return new \WP_Error('not_supported', 'This connection does not support OAuth.', ['status' => 400]);
+        }
+
+        $redirectUri = rest_url(self::NAMESPACE . "/connections/{$id}/oauth-callback");
+        $url = $connection->getOAuthUrl($redirectUri);
+
+        if (!$url) {
+            return new \WP_Error('not_configured', 'App credentials must be saved before starting the OAuth flow.', ['status' => 422]);
+        }
+
+        return new WP_REST_Response(['url' => $url]);
+    }
+
+    /**
+     * Handle the OAuth callback redirect from the platform.
+     *
+     * This endpoint is public (no auth required) because the platform
+     * redirects the browser here after the user authorizes. It exchanges
+     * the authorization code for tokens, stores them, then redirects the
+     * browser back to the PluginForge admin Connections tab.
+     */
+    public function handleOAuthCallback(WP_REST_Request $request): void
+    {
+        $id   = $request->get_param('id');
+        $code = $request->get_param('code');
+        $state = $request->get_param('state');
+
+        $adminUrl = admin_url('admin.php?page=pluginforge&tab=connections');
+
+        $connection = $this->plugin->getConnectionManager()->get($id);
+
+        if (!$connection || !method_exists($connection, 'handleCallback')) {
+            wp_redirect($adminUrl . '&oauth_error=' . urlencode('Connection not found.'));
+            exit;
+        }
+
+        if (empty($code)) {
+            $error = $request->get_param('error_description') ?? $request->get_param('error') ?? 'Authorization was denied.';
+            wp_redirect($adminUrl . '&oauth_error=' . urlencode($error));
+            exit;
+        }
+
+        $redirectUri = rest_url(self::NAMESPACE . "/connections/{$id}/oauth-callback");
+        $result = $connection->handleCallback($code, $redirectUri, $state ?? '');
+
+        if (empty($result['success'])) {
+            $error = $result['error'] ?? 'OAuth flow failed.';
+            wp_redirect($adminUrl . '&oauth_error=' . urlencode($error));
+            exit;
+        }
+
+        // Store the user access token on the connection.
+        $connection->storeOAuthResult($result);
+
+        wp_redirect($adminUrl . '&oauth_success=' . urlencode($connection->getName()));
+        exit;
     }
 
     /**

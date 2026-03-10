@@ -6,9 +6,10 @@
 # Build artifacts
 /admin/build/
 
-# IDE
+# IDE / tool settings
 .idea/
 .vscode/
+.claude/
 *.swp
 *.swo
 *~
