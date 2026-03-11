@@ -13,10 +13,10 @@
 defined('WP_UNINSTALL_PLUGIN') || exit;
 
 // Check if user wants data removed.
-$af_settings = get_option('appforge_settings', []);
-$af_delete_data = $af_settings['general']['delete_data_on_uninstall'] ?? false;
+$appforge_settings = get_option('appforge_settings', []);
+$appforge_delete_data = $appforge_settings['general']['delete_data_on_uninstall'] ?? false;
 
-if (!$af_delete_data) {
+if (!$appforge_delete_data) {
     return;
 }
 
@@ -37,32 +37,33 @@ $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, Word
 );
 
 // Delete custom post types and their meta.
-$af_post_types = $wpdb->get_col(
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+$appforge_post_types = $wpdb->get_col(
     "SELECT DISTINCT post_type FROM {$wpdb->posts} WHERE post_type LIKE 'af_%'"
 );
 
-if (!empty($af_post_types)) {
-    foreach ($af_post_types as $af_post_type) {
+if (!empty($appforge_post_types)) {
+    foreach ($appforge_post_types as $appforge_post_type) {
         $posts = get_posts([
-            'post_type'      => $af_post_type,
+            'post_type'      => $appforge_post_type,
             'posts_per_page' => -1,
             'post_status'    => 'any',
             'fields'         => 'ids',
         ]);
 
-        foreach ($posts as $af_post_id) {
-            wp_delete_post($af_post_id, true);
+        foreach ($posts as $appforge_post_id) {
+            wp_delete_post($appforge_post_id, true);
         }
     }
 }
 
 // Clean up any custom tables created by add-ons.
 // Add-ons should register their table names in the appforge_custom_tables option.
-$af_custom_tables = get_option('appforge_custom_tables', []);
-foreach ($af_custom_tables as $af_table) {
-    $af_table_name = $wpdb->prefix . sanitize_key( $af_table );
-    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-    $wpdb->query("DROP TABLE IF EXISTS {$af_table_name}"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+$appforge_custom_tables = get_option('appforge_custom_tables', []);
+foreach ($appforge_custom_tables as $appforge_table) {
+    $appforge_table_name = $wpdb->prefix . esc_sql( sanitize_key( $appforge_table ) );
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
+    $wpdb->query("DROP TABLE IF EXISTS {$appforge_table_name}");
 }
 
 // Flush rewrite rules.

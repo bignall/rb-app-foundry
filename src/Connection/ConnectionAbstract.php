@@ -327,7 +327,7 @@ abstract class ConnectionAbstract implements ConnectionInterface
             return;
         }
 
-        error_log(sprintf(
+        error_log(sprintf( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
             '[AppForge] Connection "%s" API error: %s %s returned %d - %s',
             $this->getId(),
             $method,
