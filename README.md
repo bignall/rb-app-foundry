@@ -2,7 +2,7 @@
 
 A modern, lightweight WordPress plugin starter framework with an add-on architecture, PSR-4 autoloading, and React admin panels.
 
-Built by [RB Creative Solutions LLC](https://rbcreativesolutions.com).
+Built by [RB Creative Solutions LLC](https://rbcreativesolutions.net).
 
 ---
 
@@ -325,4 +325,4 @@ GPL v2 or later. See [LICENSE](LICENSE) for details.
 ## 📮 Support
 
 - **Issues:** [GitHub Issues](https://github.com/rbcreativesolutions/pluginforge/issues)
-- **Website:** [rbcreativesolutions.com](https://rbcreativesolutions.com)
+- **Website:** [rbcreativesolutions.net](https://rbcreativesolutions.net)

@@ -18,7 +18,7 @@
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author:      RB Creative Solutions LLC
- * Author URI:  https://rbcreativesolutions.com
+ * Author URI:  https://rbcreativesolutions.net
  * Text Domain: pluginforge
  * Domain Path: /languages
  * License:     GPL v2 or later
