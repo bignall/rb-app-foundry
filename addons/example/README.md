@@ -1,6 +1,6 @@
 # Example Add-on
 
-This is a reference implementation showing how to create a AppForge add-on. It's safe to delete.
+This is a reference implementation showing how to create a RB App Foundry add-on. It's safe to delete.
 
 ## What it demonstrates
 
@@ -25,8 +25,8 @@ example/
 
 ## Usage
 
-1. Go to **AppForge → Add-ons** in the WordPress admin
+1. Go to **RB App Foundry → Add-ons** in the WordPress admin
 2. Toggle "Example Add-on" to active
 3. Visit any post to see the example notice (if enabled in settings)
-4. Use the `[appforge_example]` shortcode in any post/page
-5. Hit the REST endpoint at `/wp-json/appforge/v1/example/hello`
+4. Use the `[appfoundry_example]` shortcode in any post/page
+5. Hit the REST endpoint at `/wp-json/rb-app-foundry/v1/example/hello`

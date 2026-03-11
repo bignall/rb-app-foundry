@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace RBCS\AppForge\CPT;
+namespace RBCS\AppFoundry\CPT;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Provides a clean, declarative way to register CPTs.
  * Extend this class and define your post type properties.
  *
- * @package RBCS\AppForge\CPT
+ * @package RBCS\AppFoundry\CPT
  */
 abstract class CPTAbstract implements CPTInterface
 {

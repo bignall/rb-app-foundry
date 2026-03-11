@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Admin;
+namespace RBCS\AppFoundry\Admin;
 
 /**
  * Centralized settings management.
@@ -10,11 +10,11 @@ namespace RBCS\AppForge\Admin;
  * Provides a clean API for getting and setting plugin options
  * with defaults, validation, and caching.
  *
- * @package RBCS\AppForge\Admin
+ * @package RBCS\AppFoundry\Admin
  */
 class SettingsManager
 {
-    private const OPTION_KEY = 'appforge_settings';
+    private const OPTION_KEY = 'appfoundry_settings';
 
     /**
      * Cached settings.

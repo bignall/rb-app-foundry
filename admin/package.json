@@ -1,7 +1,7 @@
 {
-  "name": "appforge-admin",
+  "name": "rb-app-foundry-admin",
   "version": "1.0.0",
-  "description": "AppForge admin panel",
+  "description": "RB App Foundry admin panel",
   "private": true,
   "scripts": {
     "start": "wp-scripts start",

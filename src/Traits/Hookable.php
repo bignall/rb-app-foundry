@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace RBCS\AppForge\Traits;
+namespace RBCS\AppFoundry\Traits;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Provides a clean way to register actions and filters
  * with automatic method binding.
  *
- * @package RBCS\AppForge\Traits
+ * @package RBCS\AppFoundry\Traits
  */
 trait Hookable
 {

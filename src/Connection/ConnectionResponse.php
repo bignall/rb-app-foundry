@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Connection;
+namespace RBCS\AppFoundry\Connection;
 
 /**
  * Standardized response from platform API calls.
@@ -10,7 +10,7 @@ namespace RBCS\AppForge\Connection;
  * Wraps the raw API response into a consistent format that
  * the rest of the framework can work with regardless of platform.
  *
- * @package RBCS\AppForge\Connection
+ * @package RBCS\AppFoundry\Connection
  */
 class ConnectionResponse
 {

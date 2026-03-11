@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Traits;
+namespace RBCS\AppFoundry\Traits;
 
 /**
  * Trait for template/view rendering.
  *
- * @package RBCS\AppForge\Traits
+ * @package RBCS\AppFoundry\Traits
  */
 trait Renderable
 {
@@ -21,7 +21,7 @@ trait Renderable
      */
     protected function render(string $template, array $data = [], bool $echo = true): string|null
     {
-        $file = APPFORGE_PATH . 'templates/' . ltrim($template, '/');
+        $file = APPFOUNDRY_PATH . 'templates/' . ltrim($template, '/');
 
         if (!file_exists($file)) {
             return $echo ? null : '';

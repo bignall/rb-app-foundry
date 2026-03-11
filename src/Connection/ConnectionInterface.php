@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Connection;
+namespace RBCS\AppFoundry\Connection;
 
 /**
  * Contract for all platform connections.
@@ -11,7 +11,7 @@ namespace RBCS\AppForge\Connection;
  * this interface to provide a consistent API for authentication,
  * token management, and making requests.
  *
- * @package RBCS\AppForge\Connection
+ * @package RBCS\AppFoundry\Connection
  */
 interface ConnectionInterface
 {

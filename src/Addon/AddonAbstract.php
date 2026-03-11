@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Addon;
+namespace RBCS\AppFoundry\Addon;
 
-use RBCS\AppForge\Core\Plugin;
+use RBCS\AppFoundry\Core\Plugin;
 
 /**
  * Abstract base class for add-ons.
@@ -13,7 +13,7 @@ use RBCS\AppForge\Core\Plugin;
  * reimplement boilerplate. Extend this class and implement
  * the abstract methods to create a new add-on.
  *
- * @package RBCS\AppForge\Addon
+ * @package RBCS\AppFoundry\Addon
  */
 abstract class AddonAbstract implements AddonInterface
 {
@@ -153,7 +153,7 @@ abstract class AddonAbstract implements AddonInterface
      */
     public function getSetting(string $key, mixed $default = null): mixed
     {
-        $settings = get_option("appforge_addon_{$this->getId()}_settings", []);
+        $settings = get_option("appfoundry_addon_{$this->getId()}_settings", []);
         return $settings[$key] ?? $default;
     }
 
@@ -165,9 +165,9 @@ abstract class AddonAbstract implements AddonInterface
      */
     public function updateSetting(string $key, mixed $value): void
     {
-        $settings = get_option("appforge_addon_{$this->getId()}_settings", []);
+        $settings = get_option("appfoundry_addon_{$this->getId()}_settings", []);
         $settings[$key] = $value;
-        update_option("appforge_addon_{$this->getId()}_settings", $settings);
+        update_option("appfoundry_addon_{$this->getId()}_settings", $settings);
     }
 
     /**
@@ -177,7 +177,7 @@ abstract class AddonAbstract implements AddonInterface
      */
     public function getAllSettings(): array
     {
-        return get_option("appforge_addon_{$this->getId()}_settings", []);
+        return get_option("appfoundry_addon_{$this->getId()}_settings", []);
     }
 
     /**
@@ -190,7 +190,7 @@ abstract class AddonAbstract implements AddonInterface
         ?string $version = null
     ): void {
         wp_enqueue_style(
-            "appforge-{$this->getId()}-{$handle}",
+            "appfoundry-{$this->getId()}-{$handle}",
             $this->getUrl("assets/css/{$file}"),
             $deps,
             $version ?? $this->getVersion()
@@ -208,7 +208,7 @@ abstract class AddonAbstract implements AddonInterface
         bool $inFooter = true
     ): void {
         wp_enqueue_script(
-            "appforge-{$this->getId()}-{$handle}",
+            "appfoundry-{$this->getId()}-{$handle}",
             $this->getUrl("assets/js/{$file}"),
             $deps,
             $version ?? $this->getVersion(),

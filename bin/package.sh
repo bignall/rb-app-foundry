@@ -1,34 +1,34 @@
 #!/usr/bin/env bash
 # =============================================================================
-# AppForge — Package Script
+# RB App Foundry — Package Script
 # =============================================================================
 # Creates a production-ready ZIP file suitable for WordPress plugin upload.
 #
 # What it does:
 #   1. Runs bin/build.sh (Composer + optional JS)
 #   2. Assembles only the production files into a clean temp directory
-#   3. Creates appforge-{version}.zip in the dist/ directory
+#   3. Creates rb-app-foundry-{version}.zip in the dist/ directory
 #
 # Usage:
 #   bash bin/package.sh             # PHP only
 #   bash bin/package.sh --with-js  # Include built React admin
 #
 # Output:
-#   dist/appforge-1.0.0.zip
+#   dist/rb-app-foundry-1.0.0.zip
 # =============================================================================
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(dirname "$SCRIPT_DIR")"
-PLUGIN_SLUG="appforge"
+PLUGIN_SLUG="rb-app-foundry"
 DIST_DIR="$PLUGIN_DIR/dist"
 
 # ── Colours ──────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
-info()    { echo -e "${CYAN}[AppForge]${NC} $*"; }
-success() { echo -e "${GREEN}[AppForge]${NC} $*"; }
-error()   { echo -e "${RED}[AppForge] ERROR:${NC} $*" >&2; exit 1; }
+info()    { echo -e "${CYAN}[RB App Foundry]${NC} $*"; }
+success() { echo -e "${GREEN}[RB App Foundry]${NC} $*"; }
+error()   { echo -e "${RED}[RB App Foundry] ERROR:${NC} $*" >&2; exit 1; }
 
 # ── Step 1: Build ─────────────────────────────────────────────────────────────
 info "Running build step..."

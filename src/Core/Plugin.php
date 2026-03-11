@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 
-namespace RBCS\AppForge\Core;
+namespace RBCS\AppFoundry\Core;
 
 defined( 'ABSPATH' ) || exit;
 
-use RBCS\AppForge\Addon\AddonManager;
-use RBCS\AppForge\Admin\AdminPage;
-use RBCS\AppForge\Admin\RestAPI;
-use RBCS\AppForge\Connection\ConnectionManager;
+use RBCS\AppFoundry\Addon\AddonManager;
+use RBCS\AppFoundry\Admin\AdminPage;
+use RBCS\AppFoundry\Admin\RestAPI;
+use RBCS\AppFoundry\Connection\ConnectionManager;
 
 /**
  * Main plugin orchestrator.
@@ -18,7 +18,7 @@ use RBCS\AppForge\Connection\ConnectionManager;
  * Singleton that initializes the framework, loads core components,
  * and delegates to the AddonManager for add-on loading.
  *
- * @package RBCS\AppForge\Core
+ * @package RBCS\AppFoundry\Core
  */
 final class Plugin
 {
@@ -87,14 +87,14 @@ final class Plugin
         add_action('wp_enqueue_scripts', [$this, 'enqueueFrontendAssets']);
 
         /**
-         * Fires after AppForge has fully booted.
+         * Fires after RB App Foundry has fully booted.
          *
-         * Use this hook to interact with AppForge after all core
+         * Use this hook to interact with RB App Foundry after all core
          * components and active add-ons have been initialized.
          *
          * @param Plugin $plugin The plugin instance.
          */
-        do_action('appforge_loaded', $this);
+        do_action('appfoundry_loaded', $this);
     }
 
     /**
@@ -150,7 +150,7 @@ final class Plugin
      */
     public function getVersion(): string
     {
-        return APPFORGE_VERSION;
+        return APPFOUNDRY_VERSION;
     }
 
     /**
@@ -158,7 +158,7 @@ final class Plugin
      */
     public function getPath(string $relative = ''): string
     {
-        return APPFORGE_PATH . ltrim($relative, '/');
+        return APPFOUNDRY_PATH . ltrim($relative, '/');
     }
 
     /**
@@ -166,7 +166,7 @@ final class Plugin
      */
     public function getUrl(string $relative = ''): string
     {
-        return APPFORGE_URL . ltrim($relative, '/');
+        return APPFOUNDRY_URL . ltrim($relative, '/');
     }
 
     /**

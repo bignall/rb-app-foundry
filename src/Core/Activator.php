@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Core;
+namespace RBCS\AppFoundry\Core;
 
 /**
  * Handles plugin activation tasks.
@@ -10,7 +10,7 @@ namespace RBCS\AppForge\Core;
  * Creates necessary database tables, sets default options,
  * and performs any first-time setup.
  *
- * @package RBCS\AppForge\Core
+ * @package RBCS\AppFoundry\Core
  */
 class Activator
 {
@@ -20,11 +20,11 @@ class Activator
     public static function activate(): void
     {
         // Check requirements one more time.
-        if (version_compare(PHP_VERSION, APPFORGE_MIN_PHP, '<')) {
+        if (version_compare(PHP_VERSION, APPFOUNDRY_MIN_PHP, '<')) {
             wp_die(
                 sprintf(
-                    'AppForge requires PHP %s or higher.',
-                    esc_html( APPFORGE_MIN_PHP )
+                    'RB App Foundry requires PHP %s or higher.',
+                    esc_html( APPFOUNDRY_MIN_PHP )
                 ),
                 'Plugin Activation Error',
                 ['back_link' => true]
@@ -38,7 +38,7 @@ class Activator
         self::createTables();
 
         // Store version for upgrade routines.
-        update_option('appforge_version', APPFORGE_VERSION);
+        update_option('appfoundry_version', APPFOUNDRY_VERSION);
 
         // Flush rewrite rules for any CPTs.
         flush_rewrite_rules();
@@ -50,12 +50,12 @@ class Activator
     private static function setDefaults(): void
     {
         $defaults = [
-            'appforge_settings' => [
+            'appfoundry_settings' => [
                 'general' => [
                     'delete_data_on_uninstall' => false,
                 ],
             ],
-            'appforge_active_addons' => [],
+            'appfoundry_active_addons' => [],
         ];
 
         foreach ($defaults as $key => $value) {

@@ -1,5 +1,5 @@
 {
-    "name": "rbcs/appforge",
+    "name": "rbcs/rb-app-foundry",
     "description": "A modern WordPress plugin starter framework with add-on architecture, PSR-4 autoloading, and React admin panels.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
@@ -22,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RBCS\\AppForge\\": "src/"
+            "RBCS\\AppFoundry\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RBCS\\AppForge\\Tests\\": "tests/"
+            "RBCS\\AppFoundry\\Tests\\": "tests/"
         }
     },
     "config": {

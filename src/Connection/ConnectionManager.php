@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Connection;
+namespace RBCS\AppFoundry\Connection;
 
 /**
  * Registry and manager for platform connections.
@@ -10,7 +10,7 @@ namespace RBCS\AppForge\Connection;
  * Connections register themselves here. The manager provides
  * a central place to look up, test, and manage all connections.
  *
- * @package RBCS\AppForge\Connection
+ * @package RBCS\AppFoundry\Connection
  */
 class ConnectionManager
 {
@@ -36,7 +36,7 @@ class ConnectionManager
          * @param string              $id         The connection ID.
          * @param ConnectionInterface $connection The connection instance.
          */
-        do_action('appforge_connection_registered', $connection->getId(), $connection);
+        do_action('appfoundry_connection_registered', $connection->getId(), $connection);
     }
 
     /**

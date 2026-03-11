@@ -1,4 +1,4 @@
-# AppForge
+# RB App Foundry
 
 A modern, lightweight WordPress plugin starter framework with an add-on architecture, PSR-4 autoloading, and React admin panels.
 
@@ -6,9 +6,9 @@ Built by [RB Creative Solutions LLC](https://rbcreativesolutions.net).
 
 ---
 
-## 🎯 What is AppForge?
+## What is RB App Foundry?
 
-AppForge is a **starter framework** for building WordPress plugins. It gives you a solid, opinionated foundation so you can focus on your plugin's features instead of reinventing boilerplate.
+RB App Foundry is a **starter framework** for building WordPress plugins. It gives you a solid, opinionated foundation so you can focus on your plugin's features instead of reinventing boilerplate.
 
 ### Key Features
 
@@ -22,7 +22,7 @@ AppForge is a **starter framework** for building WordPress plugins. It gives you
 
 ---
 
-## 📋 Requirements
+## Requirements
 
 - **PHP** 8.0 or higher
 - **WordPress** 6.4 or higher
@@ -31,13 +31,13 @@ AppForge is a **starter framework** for building WordPress plugins. It gives you
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone or Download
 
 ```bash
-git clone https://github.com/rbcreativesolutions/appforge.git
-cd appforge
+git clone https://github.com/bignall/app-forge.git
+cd rb-app-foundry
 ```
 
 ### 2. Install Dependencies
@@ -55,38 +55,38 @@ cd ..
 
 ### 3. Install in WordPress
 
-Copy or symlink the `appforge` directory into your WordPress `wp-content/plugins/` directory, then activate it from the WordPress admin.
+Copy or symlink the `rb-app-foundry` directory into your WordPress `wp-content/plugins/` directory, then activate it from the WordPress admin.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-appforge/
-├── appforge.php              # Main plugin file (minimal bootstrap)
-├── composer.json                # PSR-4 autoloading
-├── uninstall.php                # Clean uninstall handler
+rb-app-foundry/
+├── rb-app-foundry.php        # Main plugin file (minimal bootstrap)
+├── composer.json             # PSR-4 autoloading
+├── uninstall.php             # Clean uninstall handler
 │
-├── src/                         # Core framework (RBCS\AppForge)
-│   ├── Core/                    # Plugin orchestrator, activator, deactivator, assets
-│   ├── Addon/                   # Add-on system (interface, abstract, manager, proxy)
-│   ├── Admin/                   # Admin page, REST API, settings manager
-│   ├── CPT/                     # Custom post type & taxonomy abstractions
-│   ├── Connection/              # Platform connection abstractions
-│   └── Traits/                  # Reusable traits (HasSettings, Hookable, Renderable)
+├── src/                      # Core framework (RBCS\AppFoundry)
+│   ├── Core/                 # Plugin orchestrator, activator, deactivator, assets
+│   ├── Addon/                # Add-on system (interface, abstract, manager, proxy)
+│   ├── Admin/                # Admin page, REST API, settings manager
+│   ├── CPT/                  # Custom post type & taxonomy abstractions
+│   ├── Connection/           # Platform connection abstractions
+│   └── Traits/               # Reusable traits (HasSettings, Hookable, Renderable)
 │
-├── addons/                      # Add-on directory (each add-on is a subfolder)
-├── admin/                       # React admin app source
-├── templates/                   # PHP template files
-├── languages/                   # i18n translation files
-└── assets/                      # Static assets (CSS, JS, images)
+├── addons/                   # Add-on directory (each add-on is a subfolder)
+├── admin/                    # React admin app source
+├── templates/                # PHP template files
+├── languages/                # i18n translation files
+└── assets/                   # Static assets (CSS, JS, images)
 ```
 
 ---
 
-## 🧩 Creating an Add-on
+## Creating an Add-on
 
-Add-ons are the primary way to extend AppForge. Each add-on is a self-contained folder inside `addons/`.
+Add-ons are the primary way to extend RB App Foundry. Each add-on is a self-contained folder inside `addons/`.
 
 ### 1. Create the add-on directory
 
@@ -124,7 +124,7 @@ declare(strict_types=1);
 
 namespace RBCS\SocialPillar\Addons\MyFeature;
 
-use RBCS\AppForge\Addon\AddonAbstract;
+use RBCS\AppFoundry\Addon\AddonAbstract;
 
 class MyFeatureAddon extends AddonAbstract
 {
@@ -165,11 +165,11 @@ class MyFeatureAddon extends AddonAbstract
 
 ### 4. Activate it
 
-Go to **AppForge → Add-ons** in the WordPress admin and toggle your add-on on.
+Go to **RB App Foundry → Add-ons** in the WordPress admin and toggle your add-on on.
 
 ---
 
-## 🔌 Creating a Connection
+## Creating a Connection
 
 Connections provide a consistent interface for communicating with external platforms.
 
@@ -180,9 +180,9 @@ declare(strict_types=1);
 
 namespace RBCS\SocialPillar\Connections;
 
-use RBCS\AppForge\Connection\AuthType;
-use RBCS\AppForge\Connection\ConnectionAbstract;
-use RBCS\AppForge\Connection\ConnectionResponse;
+use RBCS\AppFoundry\Connection\AuthType;
+use RBCS\AppFoundry\Connection\ConnectionAbstract;
+use RBCS\AppFoundry\Connection\ConnectionResponse;
 
 class FacebookConnection extends ConnectionAbstract
 {
@@ -249,14 +249,14 @@ public function boot(): void
 
 ---
 
-## 📝 Creating Custom Post Types
+## Creating Custom Post Types
 
 ```php
 <?php
 
 namespace RBCS\SocialPillar\CPT;
 
-use RBCS\AppForge\CPT\CPTAbstract;
+use RBCS\AppFoundry\CPT\CPTAbstract;
 
 class SocialPostCPT extends CPTAbstract
 {
@@ -277,7 +277,7 @@ $cpt->register();
 
 ---
 
-## 🛠 Development
+## Development
 
 ### Building the Admin Panel
 
@@ -297,7 +297,7 @@ composer test      # PHPUnit tests
 
 ---
 
-## 🔒 Security
+## Security
 
 - All REST endpoints require `manage_options` capability
 - Sensitive credentials (API keys, tokens) are encrypted using OpenSSL before storage
@@ -306,13 +306,13 @@ composer test      # PHPUnit tests
 
 ---
 
-## 📄 License
+## License
 
 GPL v2 or later. See [LICENSE](LICENSE) for details.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -322,7 +322,7 @@ GPL v2 or later. See [LICENSE](LICENSE) for details.
 
 ---
 
-## 📮 Support
+## Support
 
-- **Issues:** [GitHub Issues](https://github.com/rbcreativesolutions/appforge/issues)
+- **Issues:** [GitHub Issues](https://github.com/bignall/app-forge/issues)
 - **Website:** [rbcreativesolutions.net](https://rbcreativesolutions.net)

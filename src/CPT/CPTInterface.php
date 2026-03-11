@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\CPT;
+namespace RBCS\AppFoundry\CPT;
 
 /**
  * Contract for custom post type registration.
  *
- * @package RBCS\AppForge\CPT
+ * @package RBCS\AppFoundry\CPT
  */
 interface CPTInterface
 {

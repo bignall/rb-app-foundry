@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 
-namespace RBCS\AppForge\Connection;
+namespace RBCS\AppFoundry\Connection;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Authentication types supported by connections.
  *
- * @package RBCS\AppForge\Connection
+ * @package RBCS\AppFoundry\Connection
  */
 enum AuthType: string
 {

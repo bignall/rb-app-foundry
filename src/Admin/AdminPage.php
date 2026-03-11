@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 
-namespace RBCS\AppForge\Admin;
+namespace RBCS\AppFoundry\Admin;
 
 defined( 'ABSPATH' ) || exit;
 
-use RBCS\AppForge\Core\Assets;
-use RBCS\AppForge\Core\Plugin;
+use RBCS\AppFoundry\Core\Assets;
+use RBCS\AppFoundry\Core\Plugin;
 
 /**
  * Registers the admin menu page and renders the React app shell.
@@ -16,7 +16,7 @@ use RBCS\AppForge\Core\Plugin;
  * The actual UI is rendered by React. This class just provides
  * the WordPress admin menu entry and the mounting div.
  *
- * @package RBCS\AppForge\Admin
+ * @package RBCS\AppFoundry\Admin
  */
 class AdminPage
 {
@@ -39,10 +39,10 @@ class AdminPage
     public function addMenuPage(): void
     {
         add_menu_page(
-            __('AppForge', 'appforge'),
-            __('AppForge', 'appforge'),
+            __('RB App Foundry', 'rb-app-foundry'),
+            __('RB App Foundry', 'rb-app-foundry'),
             'manage_options',
-            APPFORGE_SLUG,
+            APPFOUNDRY_SLUG,
             [$this, 'renderPage'],
             'dashicons-admin-generic',
             30
@@ -56,6 +56,6 @@ class AdminPage
      */
     public function renderPage(): void
     {
-        echo '<div id="appforge-admin-root" class="wrap"></div>';
+        echo '<div id="appfoundry-admin-root" class="wrap"></div>';
     }
 }

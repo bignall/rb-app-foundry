@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Core;
+namespace RBCS\AppFoundry\Core;
 
 /**
  * Handles plugin deactivation tasks.
@@ -10,7 +10,7 @@ namespace RBCS\AppForge\Core;
  * Cleans up scheduled events and transients but preserves
  * data (options, tables) for potential reactivation.
  *
- * @package RBCS\AppForge\Core
+ * @package RBCS\AppFoundry\Core
  */
 class Deactivator
 {
@@ -32,8 +32,8 @@ class Deactivator
     private static function clearScheduledEvents(): void
     {
         $events = [
-            'appforge_daily_maintenance',
-            'appforge_hourly_check',
+            'appfoundry_daily_maintenance',
+            'appfoundry_hourly_check',
         ];
 
         foreach ($events as $event) {
@@ -48,6 +48,6 @@ class Deactivator
          *
          * Add-ons should hook into this to clear their own cron events.
          */
-        do_action('appforge_clear_scheduled_events');
+        do_action('appfoundry_clear_scheduled_events');
     }
 }

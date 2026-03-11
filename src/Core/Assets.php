@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\AppForge\Core;
+namespace RBCS\AppFoundry\Core;
 
 /**
  * Handles asset enqueuing with conditional loading.
@@ -10,7 +10,7 @@ namespace RBCS\AppForge\Core;
  * Only loads scripts and styles when they're actually needed,
  * keeping the front-end footprint minimal.
  *
- * @package RBCS\AppForge\Core
+ * @package RBCS\AppFoundry\Core
  */
 class Assets
 {
@@ -22,11 +22,11 @@ class Assets
     public static function enqueueAdmin(string $hookSuffix): void
     {
         // Only load on our admin pages.
-        if (!str_contains($hookSuffix, APPFORGE_SLUG)) {
+        if (!str_contains($hookSuffix, APPFOUNDRY_SLUG)) {
             return;
         }
 
-        $assetFile = APPFORGE_PATH . 'admin/build/index.asset.php';
+        $assetFile = APPFOUNDRY_PATH . 'admin/build/index.asset.php';
 
         if (!file_exists($assetFile)) {
             return;
@@ -35,27 +35,27 @@ class Assets
         $asset = require $assetFile;
 
         wp_enqueue_script(
-            'appforge-admin',
-            APPFORGE_URL . 'admin/build/index.js',
+            'appfoundry-admin',
+            APPFOUNDRY_URL . 'admin/build/index.js',
             $asset['dependencies'] ?? ['wp-element', 'wp-components', 'wp-api-fetch'],
-            $asset['version'] ?? APPFORGE_VERSION,
+            $asset['version'] ?? APPFOUNDRY_VERSION,
             true
         );
 
         wp_enqueue_style(
-            'appforge-admin',
-            APPFORGE_URL . 'admin/build/index.css',
+            'appfoundry-admin',
+            APPFOUNDRY_URL . 'admin/build/index.css',
             ['wp-components'],
-            $asset['version'] ?? APPFORGE_VERSION
+            $asset['version'] ?? APPFOUNDRY_VERSION
         );
 
         // Pass data to React app.
-        wp_localize_script('appforge-admin', 'appForgeData', [
-            'restUrl'   => rest_url('appforge/v1/'),
+        wp_localize_script('appfoundry-admin', 'appFoundryData', [
+            'restUrl'   => rest_url('rb-app-foundry/v1/'),
             'nonce'     => wp_create_nonce('wp_rest'),
-            'version'   => APPFORGE_VERSION,
+            'version'   => APPFOUNDRY_VERSION,
             'adminUrl'  => admin_url(),
-            'pluginUrl' => APPFORGE_URL,
+            'pluginUrl' => APPFOUNDRY_URL,
         ]);
     }
 }
