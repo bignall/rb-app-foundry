@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\CPT;
+namespace RBCS\AppForge\CPT;
 
 /**
  * Abstract base class for custom post types.
@@ -10,7 +10,7 @@ namespace RBCS\PluginForge\CPT;
  * Provides a clean, declarative way to register CPTs.
  * Extend this class and define your post type properties.
  *
- * @package RBCS\PluginForge\CPT
+ * @package RBCS\AppForge\CPT
  */
 abstract class CPTAbstract implements CPTInterface
 {

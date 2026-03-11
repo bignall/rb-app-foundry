@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Addon;
+namespace RBCS\AppForge\Addon;
 
 /**
  * Lightweight proxy for inactive add-ons.
@@ -10,7 +10,7 @@ namespace RBCS\PluginForge\Addon;
  * Allows the admin UI to display information about all available
  * add-ons without loading their full PHP code. Only reads addon.json.
  *
- * @package RBCS\PluginForge\Addon
+ * @package RBCS\AppForge\Addon
  */
 class InactiveAddonProxy implements AddonInterface
 {

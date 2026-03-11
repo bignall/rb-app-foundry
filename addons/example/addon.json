@@ -1,11 +1,11 @@
 {
     "id": "example",
     "name": "Example Add-on",
-    "description": "A sample add-on demonstrating how to build PluginForge add-ons. Safe to delete.",
+    "description": "A sample add-on demonstrating how to build AppForge add-ons. Safe to delete.",
     "version": "1.0.0",
     "author": "RB Creative Solutions LLC",
     "default_active": false,
     "dependencies": [],
-    "namespace": "RBCS\\PluginForge\\Addons\\Example",
-    "entry_class": "RBCS\\PluginForge\\Addons\\Example\\ExampleAddon"
+    "namespace": "RBCS\\AppForge\\Addons\\Example",
+    "entry_class": "RBCS\\AppForge\\Addons\\Example\\ExampleAddon"
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Traits;
+namespace RBCS\AppForge\Traits;
 
 /**
  * Trait for easy WordPress hook registration.
@@ -10,7 +10,7 @@ namespace RBCS\PluginForge\Traits;
  * Provides a clean way to register actions and filters
  * with automatic method binding.
  *
- * @package RBCS\PluginForge\Traits
+ * @package RBCS\AppForge\Traits
  */
 trait Hookable
 {

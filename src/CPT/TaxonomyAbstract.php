@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\CPT;
+namespace RBCS\AppForge\CPT;
 
 /**
  * Abstract base class for custom taxonomies.
  *
  * Provides a clean, declarative way to register taxonomies.
  *
- * @package RBCS\PluginForge\CPT
+ * @package RBCS\AppForge\CPT
  */
 abstract class TaxonomyAbstract
 {

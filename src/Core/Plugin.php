@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Core;
+namespace RBCS\AppForge\Core;
 
-use RBCS\PluginForge\Addon\AddonManager;
-use RBCS\PluginForge\Admin\AdminPage;
-use RBCS\PluginForge\Admin\RestAPI;
-use RBCS\PluginForge\Connection\ConnectionManager;
+use RBCS\AppForge\Addon\AddonManager;
+use RBCS\AppForge\Admin\AdminPage;
+use RBCS\AppForge\Admin\RestAPI;
+use RBCS\AppForge\Connection\ConnectionManager;
 
 /**
  * Main plugin orchestrator.
@@ -15,7 +15,7 @@ use RBCS\PluginForge\Connection\ConnectionManager;
  * Singleton that initializes the framework, loads core components,
  * and delegates to the AddonManager for add-on loading.
  *
- * @package RBCS\PluginForge\Core
+ * @package RBCS\AppForge\Core
  */
 final class Plugin
 {
@@ -87,14 +87,14 @@ final class Plugin
         add_action('wp_enqueue_scripts', [$this, 'enqueueFrontendAssets']);
 
         /**
-         * Fires after PluginForge has fully booted.
+         * Fires after AppForge has fully booted.
          *
-         * Use this hook to interact with PluginForge after all core
+         * Use this hook to interact with AppForge after all core
          * components and active add-ons have been initialized.
          *
          * @param Plugin $plugin The plugin instance.
          */
-        do_action('pluginforge_loaded', $this);
+        do_action('appforge_loaded', $this);
     }
 
     /**
@@ -135,9 +135,9 @@ final class Plugin
     private function loadTextDomain(): void
     {
         load_plugin_textdomain(
-            'pluginforge',
+            'appforge',
             false,
-            dirname(PLUGINFORGE_BASENAME) . '/languages'
+            dirname(APPFORGE_BASENAME) . '/languages'
         );
     }
 
@@ -162,7 +162,7 @@ final class Plugin
      */
     public function getVersion(): string
     {
-        return PLUGINFORGE_VERSION;
+        return APPFORGE_VERSION;
     }
 
     /**
@@ -170,7 +170,7 @@ final class Plugin
      */
     public function getPath(string $relative = ''): string
     {
-        return PLUGINFORGE_PATH . ltrim($relative, '/');
+        return APPFORGE_PATH . ltrim($relative, '/');
     }
 
     /**
@@ -178,7 +178,7 @@ final class Plugin
      */
     public function getUrl(string $relative = ''): string
     {
-        return PLUGINFORGE_URL . ltrim($relative, '/');
+        return APPFORGE_URL . ltrim($relative, '/');
     }
 
     /**

@@ -1,7 +1,7 @@
 {
-  "name": "pluginforge-admin",
+  "name": "appforge-admin",
   "version": "1.0.0",
-  "description": "PluginForge admin panel",
+  "description": "AppForge admin panel",
   "private": true,
   "scripts": {
     "start": "wp-scripts start",

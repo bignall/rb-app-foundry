@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Addons\Example;
+namespace RBCS\AppForge\Addons\Example;
 
-use RBCS\PluginForge\Addon\AddonAbstract;
+use RBCS\AppForge\Addon\AddonAbstract;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -12,10 +12,10 @@ use WP_REST_Server;
 /**
  * Example Add-on
  *
- * Demonstrates how to create a PluginForge add-on.
+ * Demonstrates how to create a AppForge add-on.
  * This add-on is safe to delete — it's just a reference implementation.
  *
- * @package RBCS\PluginForge\Addons\Example
+ * @package RBCS\AppForge\Addons\Example
  */
 class ExampleAddon extends AddonAbstract
 {
@@ -36,7 +36,7 @@ class ExampleAddon extends AddonAbstract
     public function boot(): void
     {
         // Example: Register a shortcode.
-        add_shortcode('pluginforge_example', [$this, 'renderShortcode']);
+        add_shortcode('appforge_example', [$this, 'renderShortcode']);
 
         // Example: Add a filter.
         add_filter('the_content', [$this, 'appendExampleNotice'], 999);
@@ -51,7 +51,7 @@ class ExampleAddon extends AddonAbstract
     {
         // Set default settings for this add-on.
         $this->updateSetting('show_notice', false);
-        $this->updateSetting('notice_text', 'This is an example notice from PluginForge!');
+        $this->updateSetting('notice_text', 'This is an example notice from AppForge!');
     }
 
     /**
@@ -73,7 +73,7 @@ class ExampleAddon extends AddonAbstract
                 'id'      => 'notice_text',
                 'type'    => 'text',
                 'label'   => 'Notice Text',
-                'default' => 'This is an example notice from PluginForge!',
+                'default' => 'This is an example notice from AppForge!',
             ],
         ];
     }
@@ -85,7 +85,7 @@ class ExampleAddon extends AddonAbstract
      */
     public function registerRoutes(): void
     {
-        register_rest_route('pluginforge/v1', '/example/hello', [
+        register_rest_route('appforge/v1', '/example/hello', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [$this, 'helloEndpoint'],
             'permission_callback' => '__return_true',
@@ -109,11 +109,11 @@ class ExampleAddon extends AddonAbstract
     public function renderShortcode(array $atts = []): string
     {
         $atts = shortcode_atts([
-            'text' => 'Hello from PluginForge!',
+            'text' => 'Hello from AppForge!',
         ], $atts);
 
         return sprintf(
-            '<div class="pluginforge-example">%s</div>',
+            '<div class="appforge-example">%s</div>',
             esc_html($atts['text'])
         );
     }
@@ -134,7 +134,7 @@ class ExampleAddon extends AddonAbstract
         }
 
         return $content . sprintf(
-            '<div class="pluginforge-example-notice" style="padding:12px;background:#f0f0f1;border-left:4px solid #2271b1;margin-top:20px;">%s</div>',
+            '<div class="appforge-example-notice" style="padding:12px;background:#f0f0f1;border-left:4px solid #2271b1;margin-top:20px;">%s</div>',
             esc_html($noticeText)
         );
     }

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Traits;
+namespace RBCS\AppForge\Traits;
 
-use RBCS\PluginForge\Admin\SettingsManager;
+use RBCS\AppForge\Admin\SettingsManager;
 
 /**
  * Trait for classes that need easy settings access.
  *
- * @package RBCS\PluginForge\Traits
+ * @package RBCS\AppForge\Traits
  */
 trait HasSettings
 {

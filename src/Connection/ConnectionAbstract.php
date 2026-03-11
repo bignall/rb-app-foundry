@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Connection;
+namespace RBCS\AppForge\Connection;
 
 /**
  * Abstract base class for platform connections.
@@ -15,11 +15,11 @@ namespace RBCS\PluginForge\Connection;
  * 2. External credentials: Credentials are provided per-request, typically
  *    from a Social Account CPT. This supports multiple accounts per platform.
  *
- * @package RBCS\PluginForge\Connection
+ * @package RBCS\AppForge\Connection
  */
 abstract class ConnectionAbstract implements ConnectionInterface
 {
-    private const OPTION_PREFIX = 'pluginforge_connection_';
+    private const OPTION_PREFIX = 'appforge_connection_';
 
     /**
      * Cached self-managed credentials.
@@ -88,7 +88,7 @@ abstract class ConnectionAbstract implements ConnectionInterface
         delete_option(self::OPTION_PREFIX . $this->getId());
         $this->cachedCredentials = null;
 
-        do_action('pluginforge_connection_disconnected', $this->getId());
+        do_action('appforge_connection_disconnected', $this->getId());
     }
 
     /**
@@ -290,7 +290,7 @@ abstract class ConnectionAbstract implements ConnectionInterface
 
     private function getEncryptionKey(): string
     {
-        return hash('sha256', AUTH_KEY . SECURE_AUTH_KEY . 'pluginforge');
+        return hash('sha256', AUTH_KEY . SECURE_AUTH_KEY . 'appforge');
     }
 
     private function encrypt(string $data, string $key): string
@@ -328,7 +328,7 @@ abstract class ConnectionAbstract implements ConnectionInterface
         }
 
         error_log(sprintf(
-            '[PluginForge] Connection "%s" API error: %s %s returned %d - %s',
+            '[AppForge] Connection "%s" API error: %s %s returned %d - %s',
             $this->getId(),
             $method,
             $url,

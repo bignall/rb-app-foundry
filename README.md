@@ -1,4 +1,4 @@
-# PluginForge
+# AppForge
 
 A modern, lightweight WordPress plugin starter framework with an add-on architecture, PSR-4 autoloading, and React admin panels.
 
@@ -6,9 +6,9 @@ Built by [RB Creative Solutions LLC](https://rbcreativesolutions.net).
 
 ---
 
-## 🎯 What is PluginForge?
+## 🎯 What is AppForge?
 
-PluginForge is a **starter framework** for building WordPress plugins. It gives you a solid, opinionated foundation so you can focus on your plugin's features instead of reinventing boilerplate.
+AppForge is a **starter framework** for building WordPress plugins. It gives you a solid, opinionated foundation so you can focus on your plugin's features instead of reinventing boilerplate.
 
 ### Key Features
 
@@ -36,8 +36,8 @@ PluginForge is a **starter framework** for building WordPress plugins. It gives 
 ### 1. Clone or Download
 
 ```bash
-git clone https://github.com/rbcreativesolutions/pluginforge.git
-cd pluginforge
+git clone https://github.com/rbcreativesolutions/appforge.git
+cd appforge
 ```
 
 ### 2. Install Dependencies
@@ -55,19 +55,19 @@ cd ..
 
 ### 3. Install in WordPress
 
-Copy or symlink the `pluginforge` directory into your WordPress `wp-content/plugins/` directory, then activate it from the WordPress admin.
+Copy or symlink the `appforge` directory into your WordPress `wp-content/plugins/` directory, then activate it from the WordPress admin.
 
 ---
 
 ## 📁 Project Structure
 
 ```
-pluginforge/
-├── pluginforge.php              # Main plugin file (minimal bootstrap)
+appforge/
+├── appforge.php              # Main plugin file (minimal bootstrap)
 ├── composer.json                # PSR-4 autoloading
 ├── uninstall.php                # Clean uninstall handler
 │
-├── src/                         # Core framework (RBCS\PluginForge)
+├── src/                         # Core framework (RBCS\AppForge)
 │   ├── Core/                    # Plugin orchestrator, activator, deactivator, assets
 │   ├── Addon/                   # Add-on system (interface, abstract, manager, proxy)
 │   ├── Admin/                   # Admin page, REST API, settings manager
@@ -86,7 +86,7 @@ pluginforge/
 
 ## 🧩 Creating an Add-on
 
-Add-ons are the primary way to extend PluginForge. Each add-on is a self-contained folder inside `addons/`.
+Add-ons are the primary way to extend AppForge. Each add-on is a self-contained folder inside `addons/`.
 
 ### 1. Create the add-on directory
 
@@ -124,7 +124,7 @@ declare(strict_types=1);
 
 namespace RBCS\SocialPillar\Addons\MyFeature;
 
-use RBCS\PluginForge\Addon\AddonAbstract;
+use RBCS\AppForge\Addon\AddonAbstract;
 
 class MyFeatureAddon extends AddonAbstract
 {
@@ -165,7 +165,7 @@ class MyFeatureAddon extends AddonAbstract
 
 ### 4. Activate it
 
-Go to **PluginForge → Add-ons** in the WordPress admin and toggle your add-on on.
+Go to **AppForge → Add-ons** in the WordPress admin and toggle your add-on on.
 
 ---
 
@@ -180,9 +180,9 @@ declare(strict_types=1);
 
 namespace RBCS\SocialPillar\Connections;
 
-use RBCS\PluginForge\Connection\AuthType;
-use RBCS\PluginForge\Connection\ConnectionAbstract;
-use RBCS\PluginForge\Connection\ConnectionResponse;
+use RBCS\AppForge\Connection\AuthType;
+use RBCS\AppForge\Connection\ConnectionAbstract;
+use RBCS\AppForge\Connection\ConnectionResponse;
 
 class FacebookConnection extends ConnectionAbstract
 {
@@ -256,7 +256,7 @@ public function boot(): void
 
 namespace RBCS\SocialPillar\CPT;
 
-use RBCS\PluginForge\CPT\CPTAbstract;
+use RBCS\AppForge\CPT\CPTAbstract;
 
 class SocialPostCPT extends CPTAbstract
 {
@@ -324,5 +324,5 @@ GPL v2 or later. See [LICENSE](LICENSE) for details.
 
 ## 📮 Support
 
-- **Issues:** [GitHub Issues](https://github.com/rbcreativesolutions/pluginforge/issues)
+- **Issues:** [GitHub Issues](https://github.com/rbcreativesolutions/appforge/issues)
 - **Website:** [rbcreativesolutions.net](https://rbcreativesolutions.net)

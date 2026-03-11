@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# PluginForge — Build Script
+# AppForge — Build Script
 # =============================================================================
 # Compiles the plugin for deployment:
 #   1. Locates PHP 8.0+ and Composer on the host machine
@@ -30,10 +30,10 @@ done
 
 # ── Colours ──────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
-info()    { echo -e "${CYAN}[PluginForge]${NC} $*"; }
-success() { echo -e "${GREEN}[PluginForge]${NC} $*"; }
-warn()    { echo -e "${YELLOW}[PluginForge]${NC} $*"; }
-error()   { echo -e "${RED}[PluginForge] ERROR:${NC} $*" >&2; exit 1; }
+info()    { echo -e "${CYAN}[AppForge]${NC} $*"; }
+success() { echo -e "${GREEN}[AppForge]${NC} $*"; }
+warn()    { echo -e "${YELLOW}[AppForge]${NC} $*"; }
+error()   { echo -e "${RED}[AppForge] ERROR:${NC} $*" >&2; exit 1; }
 
 info "Starting build in: $PLUGIN_DIR"
 
@@ -146,4 +146,4 @@ else
   warn "Skipping React admin build. Run with --with-js to include it."
 fi
 
-success "PluginForge build finished."
+success "AppForge build finished."

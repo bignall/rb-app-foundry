@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Core;
+namespace RBCS\AppForge\Core;
 
 /**
  * Handles plugin activation tasks.
@@ -10,7 +10,7 @@ namespace RBCS\PluginForge\Core;
  * Creates necessary database tables, sets default options,
  * and performs any first-time setup.
  *
- * @package RBCS\PluginForge\Core
+ * @package RBCS\AppForge\Core
  */
 class Activator
 {
@@ -20,11 +20,11 @@ class Activator
     public static function activate(): void
     {
         // Check requirements one more time.
-        if (version_compare(PHP_VERSION, PLUGINFORGE_MIN_PHP, '<')) {
+        if (version_compare(PHP_VERSION, APPFORGE_MIN_PHP, '<')) {
             wp_die(
                 sprintf(
-                    'PluginForge requires PHP %s or higher.',
-                    PLUGINFORGE_MIN_PHP
+                    'AppForge requires PHP %s or higher.',
+                    APPFORGE_MIN_PHP
                 ),
                 'Plugin Activation Error',
                 ['back_link' => true]
@@ -38,7 +38,7 @@ class Activator
         self::createTables();
 
         // Store version for upgrade routines.
-        update_option('pluginforge_version', PLUGINFORGE_VERSION);
+        update_option('appforge_version', APPFORGE_VERSION);
 
         // Flush rewrite rules for any CPTs.
         flush_rewrite_rules();
@@ -50,12 +50,12 @@ class Activator
     private static function setDefaults(): void
     {
         $defaults = [
-            'pluginforge_settings' => [
+            'appforge_settings' => [
                 'general' => [
                     'delete_data_on_uninstall' => false,
                 ],
             ],
-            'pluginforge_active_addons' => [],
+            'appforge_active_addons' => [],
         ];
 
         foreach ($defaults as $key => $value) {

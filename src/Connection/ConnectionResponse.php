@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Connection;
+namespace RBCS\AppForge\Connection;
 
 /**
  * Standardized response from platform API calls.
@@ -10,7 +10,7 @@ namespace RBCS\PluginForge\Connection;
  * Wraps the raw API response into a consistent format that
  * the rest of the framework can work with regardless of platform.
  *
- * @package RBCS\PluginForge\Connection
+ * @package RBCS\AppForge\Connection
  */
 class ConnectionResponse
 {

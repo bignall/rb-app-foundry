@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Connection;
+namespace RBCS\AppForge\Connection;
 
 /**
  * Contract for all platform connections.
@@ -11,7 +11,7 @@ namespace RBCS\PluginForge\Connection;
  * this interface to provide a consistent API for authentication,
  * token management, and making requests.
  *
- * @package RBCS\PluginForge\Connection
+ * @package RBCS\AppForge\Connection
  */
 interface ConnectionInterface
 {

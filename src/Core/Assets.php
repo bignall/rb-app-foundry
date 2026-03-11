@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Core;
+namespace RBCS\AppForge\Core;
 
 /**
  * Handles asset enqueuing with conditional loading.
@@ -10,7 +10,7 @@ namespace RBCS\PluginForge\Core;
  * Only loads scripts and styles when they're actually needed,
  * keeping the front-end footprint minimal.
  *
- * @package RBCS\PluginForge\Core
+ * @package RBCS\AppForge\Core
  */
 class Assets
 {
@@ -22,11 +22,11 @@ class Assets
     public static function enqueueAdmin(string $hookSuffix): void
     {
         // Only load on our admin pages.
-        if (!str_contains($hookSuffix, PLUGINFORGE_SLUG)) {
+        if (!str_contains($hookSuffix, APPFORGE_SLUG)) {
             return;
         }
 
-        $assetFile = PLUGINFORGE_PATH . 'admin/build/index.asset.php';
+        $assetFile = APPFORGE_PATH . 'admin/build/index.asset.php';
 
         if (!file_exists($assetFile)) {
             return;
@@ -35,27 +35,27 @@ class Assets
         $asset = require $assetFile;
 
         wp_enqueue_script(
-            'pluginforge-admin',
-            PLUGINFORGE_URL . 'admin/build/index.js',
+            'appforge-admin',
+            APPFORGE_URL . 'admin/build/index.js',
             $asset['dependencies'] ?? ['wp-element', 'wp-components', 'wp-api-fetch'],
-            $asset['version'] ?? PLUGINFORGE_VERSION,
+            $asset['version'] ?? APPFORGE_VERSION,
             true
         );
 
         wp_enqueue_style(
-            'pluginforge-admin',
-            PLUGINFORGE_URL . 'admin/build/index.css',
+            'appforge-admin',
+            APPFORGE_URL . 'admin/build/index.css',
             ['wp-components'],
-            $asset['version'] ?? PLUGINFORGE_VERSION
+            $asset['version'] ?? APPFORGE_VERSION
         );
 
         // Pass data to React app.
-        wp_localize_script('pluginforge-admin', 'pluginForgeData', [
-            'restUrl'   => rest_url('pluginforge/v1/'),
+        wp_localize_script('appforge-admin', 'appForgeData', [
+            'restUrl'   => rest_url('appforge/v1/'),
             'nonce'     => wp_create_nonce('wp_rest'),
-            'version'   => PLUGINFORGE_VERSION,
+            'version'   => APPFORGE_VERSION,
             'adminUrl'  => admin_url(),
-            'pluginUrl' => PLUGINFORGE_URL,
+            'pluginUrl' => APPFORGE_URL,
         ]);
     }
 }

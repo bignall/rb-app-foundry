@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Addon;
+namespace RBCS\AppForge\Addon;
 
-use RBCS\PluginForge\Core\Plugin;
+use RBCS\AppForge\Core\Plugin;
 
 /**
  * Manages add-on discovery, activation, and lifecycle.
@@ -12,7 +12,7 @@ use RBCS\PluginForge\Core\Plugin;
  * Scans the addons/ directory for available add-ons, tracks which
  * are active, and only boots/loads active ones to keep the footprint minimal.
  *
- * @package RBCS\PluginForge\Addon
+ * @package RBCS\AppForge\Addon
  */
 class AddonManager
 {
@@ -47,7 +47,7 @@ class AddonManager
     public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
-        $this->activeIds = get_option('pluginforge_active_addons', []);
+        $this->activeIds = get_option('appforge_active_addons', []);
     }
 
     /**
@@ -71,7 +71,7 @@ class AddonManager
      */
     public function discover(): void
     {
-        // Always include PluginForge's own addons/ directory first.
+        // Always include AppForge's own addons/ directory first.
         $allPaths = array_merge([$this->plugin->getAddonsPath()], $this->paths);
 
         foreach ($allPaths as $addonsPath) {
@@ -91,9 +91,9 @@ class AddonManager
         }
 
         // Handle first-time installation: activate default add-ons.
-        if (empty($this->activeIds) && !get_option('pluginforge_addons_initialized')) {
+        if (empty($this->activeIds) && !get_option('appforge_addons_initialized')) {
             $this->activateDefaults();
-            update_option('pluginforge_addons_initialized', true);
+            update_option('appforge_addons_initialized', true);
         }
     }
 
@@ -243,7 +243,7 @@ class AddonManager
         }
 
         $this->activeIds[] = $id;
-        update_option('pluginforge_active_addons', $this->activeIds);
+        update_option('appforge_active_addons', $this->activeIds);
 
         // Run the add-on's activation routine.
         $addon = $this->addons[$id];
@@ -257,7 +257,7 @@ class AddonManager
          * @param string         $id    The add-on ID.
          * @param AddonInterface $addon The add-on instance.
          */
-        do_action('pluginforge_addon_activated', $id, $addon);
+        do_action('appforge_addon_activated', $id, $addon);
 
         return true;
     }
@@ -289,14 +289,14 @@ class AddonManager
 
         unset($this->activeIds[$key]);
         $this->activeIds = array_values($this->activeIds); // Re-index.
-        update_option('pluginforge_active_addons', $this->activeIds);
+        update_option('appforge_active_addons', $this->activeIds);
 
         /**
          * Fires after an add-on is deactivated.
          *
          * @param string $id The add-on ID.
          */
-        do_action('pluginforge_addon_deactivated', $id);
+        do_action('appforge_addon_deactivated', $id);
 
         return true;
     }

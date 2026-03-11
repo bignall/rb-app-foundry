@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Connection;
+namespace RBCS\AppForge\Connection;
 
 /**
  * Authentication types supported by connections.
  *
- * @package RBCS\PluginForge\Connection
+ * @package RBCS\AppForge\Connection
  */
 enum AuthType: string
 {

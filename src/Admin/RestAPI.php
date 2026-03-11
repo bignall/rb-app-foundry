@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Admin;
+namespace RBCS\AppForge\Admin;
 
-use RBCS\PluginForge\Core\Plugin;
+use RBCS\AppForge\Core\Plugin;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -14,11 +14,11 @@ use WP_REST_Server;
  *
  * Provides endpoints for managing settings, add-ons, and connections.
  *
- * @package RBCS\PluginForge\Admin
+ * @package RBCS\AppForge\Admin
  */
 class RestAPI
 {
-    private const NAMESPACE = 'pluginforge/v1';
+    private const NAMESPACE = 'appforge/v1';
 
     public function __construct(
         private readonly Plugin $plugin
@@ -181,7 +181,7 @@ class RestAPI
      */
     public function getSettings(WP_REST_Request $request): WP_REST_Response
     {
-        $settings = get_option('pluginforge_settings', []);
+        $settings = get_option('appforge_settings', []);
 
         // Include add-on settings schemas for active add-ons.
         $addonSchemas = [];
@@ -211,9 +211,9 @@ class RestAPI
 
         // Update general settings.
         if (isset($params['general'])) {
-            $current = get_option('pluginforge_settings', []);
+            $current = get_option('appforge_settings', []);
             $updated = wp_parse_args($params['general'], $current);
-            update_option('pluginforge_settings', $updated);
+            update_option('appforge_settings', $updated);
         }
 
         // Update add-on specific settings.
@@ -223,7 +223,7 @@ class RestAPI
 
             if ($addon && $this->plugin->getAddonManager()->isActive($addonId)) {
                 update_option(
-                    "pluginforge_addon_{$addonId}_settings",
+                    "appforge_addon_{$addonId}_settings",
                     $params['addon_settings']
                 );
             }
@@ -436,7 +436,7 @@ class RestAPI
      * This endpoint is public (no auth required) because the platform
      * redirects the browser here after the user authorizes. It exchanges
      * the authorization code for tokens, stores them, then redirects the
-     * browser back to the PluginForge admin Connections tab.
+     * browser back to the AppForge admin Connections tab.
      */
     public function handleOAuthCallback(WP_REST_Request $request): void
     {
@@ -444,7 +444,7 @@ class RestAPI
         $code = $request->get_param('code');
         $state = $request->get_param('state');
 
-        $adminUrl = admin_url('admin.php?page=pluginforge&tab=connections');
+        $adminUrl = admin_url('admin.php?page=appforge&tab=connections');
 
         $connection = $this->plugin->getConnectionManager()->get($id);
 
@@ -482,7 +482,7 @@ class RestAPI
     {
         return new WP_REST_Response([
             'status'  => 'ok',
-            'version' => PLUGINFORGE_VERSION,
+            'version' => APPFORGE_VERSION,
         ]);
     }
 }

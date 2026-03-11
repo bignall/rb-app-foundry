@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to PluginForge will be documented in this file.
+All notable changes to AppForge will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial release of the PluginForge framework
+- Initial release of the AppForge framework
 - Core plugin orchestrator with singleton pattern
 - Add-on architecture with discovery, activation/deactivation, and dependency management
 - `AddonInterface` and `AddonAbstract` for creating add-ons

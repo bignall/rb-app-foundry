@@ -1,5 +1,5 @@
 {
-    "name": "rbcs/pluginforge",
+    "name": "rbcs/appforge",
     "description": "A modern WordPress plugin starter framework with add-on architecture, PSR-4 autoloading, and React admin panels.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
@@ -22,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RBCS\\PluginForge\\": "src/"
+            "RBCS\\AppForge\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RBCS\\PluginForge\\Tests\\": "tests/"
+            "RBCS\\AppForge\\Tests\\": "tests/"
         }
     },
     "config": {

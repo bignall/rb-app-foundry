@@ -1,19 +1,19 @@
 <?php
 /**
- * PluginForge Uninstall Handler.
+ * AppForge Uninstall Handler.
  *
  * Fired when the plugin is uninstalled (deleted) from WordPress.
  * Cleans up all options, custom tables, and transients if the
  * user has opted to delete data on uninstall.
  *
- * @package RBCS\PluginForge
+ * @package RBCS\AppForge
  */
 
 // Prevent direct access.
 defined('WP_UNINSTALL_PLUGIN') || exit;
 
 // Check if user wants data removed.
-$settings = get_option('pluginforge_settings', []);
+$settings = get_option('appforge_settings', []);
 $deleteData = $settings['general']['delete_data_on_uninstall'] ?? false;
 
 if (!$deleteData) {
@@ -23,22 +23,22 @@ if (!$deleteData) {
 // Remove all plugin options.
 global $wpdb;
 
-// Delete all options starting with pluginforge_.
+// Delete all options starting with appforge_.
 $wpdb->query(
-    "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'pluginforge_%'"
+    "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'appforge_%'"
 );
 
 // Delete all transients.
 $wpdb->query(
-    "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_pluginforge_%'"
+    "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_appforge_%'"
 );
 $wpdb->query(
-    "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_pluginforge_%'"
+    "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_appforge_%'"
 );
 
 // Delete custom post types and their meta.
 $postTypes = $wpdb->get_col(
-    "SELECT DISTINCT post_type FROM {$wpdb->posts} WHERE post_type LIKE 'pf_%'"
+    "SELECT DISTINCT post_type FROM {$wpdb->posts} WHERE post_type LIKE 'af_%'"
 );
 
 if (!empty($postTypes)) {
@@ -57,8 +57,8 @@ if (!empty($postTypes)) {
 }
 
 // Clean up any custom tables created by add-ons.
-// Add-ons should register their table names in the pluginforge_custom_tables option.
-$customTables = get_option('pluginforge_custom_tables', []);
+// Add-ons should register their table names in the appforge_custom_tables option.
+$customTables = get_option('appforge_custom_tables', []);
 foreach ($customTables as $table) {
     $tableName = $wpdb->prefix . $table;
     // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared

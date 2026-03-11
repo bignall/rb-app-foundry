@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RBCS\PluginForge\Addon;
+namespace RBCS\AppForge\Addon;
 
 /**
  * Contract that all add-ons must implement.
@@ -10,7 +10,7 @@ namespace RBCS\PluginForge\Addon;
  * This interface defines the minimum methods required for an add-on
  * to be discovered, managed, and integrated by the AddonManager.
  *
- * @package RBCS\PluginForge\Addon
+ * @package RBCS\AppForge\Addon
  */
 interface AddonInterface
 {
