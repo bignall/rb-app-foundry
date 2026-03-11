@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+defined( 'ABSPATH' ) || exit;
+
 namespace RBCS\AppForge\Addons\Example;
 
 use RBCS\AppForge\Addon\AddonAbstract;

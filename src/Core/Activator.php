@@ -24,7 +24,7 @@ class Activator
             wp_die(
                 sprintf(
                     'AppForge requires PHP %s or higher.',
-                    APPFORGE_MIN_PHP
+                    esc_html( APPFORGE_MIN_PHP )
                 ),
                 'Plugin Activation Error',
                 ['back_link' => true]

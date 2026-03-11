@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+defined( 'ABSPATH' ) || exit;
+
 namespace RBCS\AppForge\Core;
 
 use RBCS\AppForge\Addon\AddonManager;
@@ -61,9 +63,6 @@ final class Plugin
         }
 
         $this->booted = true;
-
-        // Load text domain for i18n.
-        $this->loadTextDomain();
 
         // Initialize core managers.
         $this->connectionManager = new ConnectionManager();
@@ -127,18 +126,6 @@ final class Plugin
     {
         // Core framework has no front-end assets by default.
         // Add-ons handle their own front-end enqueuing.
-    }
-
-    /**
-     * Load the plugin text domain for translations.
-     */
-    private function loadTextDomain(): void
-    {
-        load_plugin_textdomain(
-            'appforge',
-            false,
-            dirname(APPFORGE_BASENAME) . '/languages'
-        );
     }
 
     /**

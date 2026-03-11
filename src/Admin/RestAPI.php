@@ -449,13 +449,13 @@ class RestAPI
         $connection = $this->plugin->getConnectionManager()->get($id);
 
         if (!$connection || !method_exists($connection, 'handleCallback')) {
-            wp_redirect($adminUrl . '&oauth_error=' . urlencode('Connection not found.') . '&oauth_connection=' . urlencode($id));
+            wp_safe_redirect($adminUrl . '&oauth_error=' . urlencode('Connection not found.') . '&oauth_connection=' . urlencode($id));
             exit;
         }
 
         if (empty($code)) {
             $error = $request->get_param('error_description') ?? $request->get_param('error') ?? 'Authorization was denied.';
-            wp_redirect($adminUrl . '&oauth_error=' . urlencode($error) . '&oauth_connection=' . urlencode($id));
+            wp_safe_redirect($adminUrl . '&oauth_error=' . urlencode($error) . '&oauth_connection=' . urlencode($id));
             exit;
         }
 
@@ -464,14 +464,14 @@ class RestAPI
 
         if (empty($result['success'])) {
             $error = $result['error'] ?? 'OAuth flow failed.';
-            wp_redirect($adminUrl . '&oauth_error=' . urlencode($error) . '&oauth_connection=' . urlencode($id));
+            wp_safe_redirect($adminUrl . '&oauth_error=' . urlencode($error) . '&oauth_connection=' . urlencode($id));
             exit;
         }
 
         // Store the user access token on the connection.
         $connection->storeOAuthResult($result);
 
-        wp_redirect($adminUrl . '&oauth_success=' . urlencode($connection->getName()));
+        wp_safe_redirect($adminUrl . '&oauth_success=' . urlencode($connection->getName()));
         exit;
     }
 
