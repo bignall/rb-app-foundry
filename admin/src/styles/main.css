@@ -1,27 +1,27 @@
 /**
- * PluginForge Admin Styles
+ * RB App Foundry Admin Styles
  */
 
 /* Layout */
-.pluginforge-admin {
+.appfoundry-admin {
   max-width: 1200px;
   margin: 20px 20px 20px 0;
 }
 
-.pluginforge-header {
+.appfoundry-header {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
 }
 
-.pluginforge-header h1 {
+.appfoundry-header h1 {
   margin: 0;
   font-size: 23px;
   font-weight: 400;
 }
 
-.pluginforge-version {
+.appfoundry-version {
   background: #f0f0f1;
   padding: 2px 8px;
   border-radius: 3px;
@@ -30,7 +30,7 @@
 }
 
 /* Loading state */
-.pluginforge-loading {
+.appfoundry-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,134 +40,134 @@
 }
 
 /* Tab panels */
-.pluginforge-tabs .components-tab-panel__tabs {
+.appfoundry-tabs .components-tab-panel__tabs {
   margin-bottom: 16px;
 }
 
 /* Dashboard grid */
-.pluginforge-dashboard-grid {
+.appfoundry-dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
   margin-bottom: 16px;
 }
 
-.pluginforge-stat {
+.appfoundry-stat {
   display: flex;
   align-items: baseline;
   gap: 8px;
 }
 
-.pluginforge-stat-number {
+.appfoundry-stat-number {
   font-size: 36px;
   font-weight: 600;
   color: #2271b1;
 }
 
-.pluginforge-stat-label {
+.appfoundry-stat-label {
   font-size: 14px;
   color: #50575e;
 }
 
-.pluginforge-stat-detail {
+.appfoundry-stat-detail {
   color: #787c82;
   font-size: 13px;
   margin-top: 4px;
 }
 
-.pluginforge-quickstart {
+.appfoundry-quickstart {
   margin: 0;
   padding-left: 20px;
 }
 
-.pluginforge-quickstart li {
+.appfoundry-quickstart li {
   margin-bottom: 8px;
 }
 
-.pluginforge-empty-state {
+.appfoundry-empty-state {
   text-align: center;
 }
 
 /* Add-ons grid */
-.pluginforge-addons-grid {
+.appfoundry-addons-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 16px;
 }
 
-.pluginforge-addon-header {
+.appfoundry-addon-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 }
 
-.pluginforge-addon-header h3 {
+.appfoundry-addon-header h3 {
   margin: 0;
 }
 
-.pluginforge-addon-version {
+.appfoundry-addon-version {
   font-size: 12px;
   color: #787c82;
 }
 
-.pluginforge-addon-description {
+.appfoundry-addon-description {
   color: #50575e;
   margin-bottom: 12px;
 }
 
-.pluginforge-addon-deps {
+.appfoundry-addon-deps {
   font-size: 12px;
   color: #787c82;
   margin-bottom: 12px;
 }
 
-.pluginforge-addon-toggle {
+.appfoundry-addon-toggle {
   border-top: 1px solid #f0f0f1;
   padding-top: 12px;
   margin-top: 8px;
 }
 
 /* Connections grid */
-.pluginforge-connections-grid {
+.appfoundry-connections-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
 }
 
-.pluginforge-connection-header {
+.appfoundry-connection-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 }
 
-.pluginforge-connection-header h3 {
+.appfoundry-connection-header h3 {
   margin: 0;
 }
 
-.pluginforge-connection-status {
+.appfoundry-connection-status {
   display: flex;
   align-items: center;
   gap: 4px;
   font-size: 13px;
 }
 
-.pluginforge-connection-status.connected {
+.appfoundry-connection-status.connected {
   color: #00a32a;
 }
 
-.pluginforge-connection-status.disconnected {
+.appfoundry-connection-status.disconnected {
   color: #d63638;
 }
 
-.pluginforge-connection-auth {
+.appfoundry-connection-auth {
   font-size: 13px;
   color: #50575e;
 }
 
 /* Connection actions */
-.pluginforge-connection-actions {
+.appfoundry-connection-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -176,13 +176,13 @@
 }
 
 /* Account list */
-.pluginforge-accounts-list {
+.appfoundry-accounts-list {
   list-style: none;
   margin: 0 0 4px;
   padding: 0;
 }
 
-.pluginforge-account-item {
+.appfoundry-account-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -191,27 +191,27 @@
   border-bottom: 1px solid #f0f0f1;
 }
 
-.pluginforge-account-item:last-child {
+.appfoundry-account-item:last-child {
   border-bottom: none;
 }
 
-.pluginforge-account-info {
+.appfoundry-account-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.pluginforge-account-pages {
+.appfoundry-account-pages {
   font-size: 12px;
   color: #787c82;
 }
 
 /* Settings */
-.pluginforge-settings .components-card {
+.appfoundry-settings .components-card {
   margin-bottom: 16px;
 }
 
-.pluginforge-settings-actions {
+.appfoundry-settings-actions {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid #f0f0f1;

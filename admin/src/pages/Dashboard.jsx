@@ -12,63 +12,63 @@ const Dashboard = ({ addons, connections }) => {
   const totalConnections = Object.keys(connections).length;
 
   return (
-    <div className="pluginforge-dashboard">
-      <div className="pluginforge-dashboard-grid">
+    <div className="appfoundry-dashboard">
+      <div className="appfoundry-dashboard-grid">
         <Card>
           <CardHeader>
-            <h2>{__('Add-ons', 'pluginforge')}</h2>
+            <h2>{__('Add-ons', 'rb-app-foundry')}</h2>
           </CardHeader>
           <CardBody>
-            <div className="pluginforge-stat">
-              <span className="pluginforge-stat-number">{activeAddons.length}</span>
-              <span className="pluginforge-stat-label">
-                {__('Active', 'pluginforge')}
+            <div className="appfoundry-stat">
+              <span className="appfoundry-stat-number">{activeAddons.length}</span>
+              <span className="appfoundry-stat-label">
+                {__('Active', 'rb-app-foundry')}
               </span>
             </div>
-            <p className="pluginforge-stat-detail">
-              {addons.length} {__('total available', 'pluginforge')}
+            <p className="appfoundry-stat-detail">
+              {addons.length} {__('total available', 'rb-app-foundry')}
             </p>
           </CardBody>
         </Card>
 
         <Card>
           <CardHeader>
-            <h2>{__('Connections', 'pluginforge')}</h2>
+            <h2>{__('Connections', 'rb-app-foundry')}</h2>
           </CardHeader>
           <CardBody>
-            <div className="pluginforge-stat">
-              <span className="pluginforge-stat-number">{connectedCount}</span>
-              <span className="pluginforge-stat-label">
-                {__('Connected', 'pluginforge')}
+            <div className="appfoundry-stat">
+              <span className="appfoundry-stat-number">{connectedCount}</span>
+              <span className="appfoundry-stat-label">
+                {__('Connected', 'rb-app-foundry')}
               </span>
             </div>
-            <p className="pluginforge-stat-detail">
-              {totalConnections} {__('total registered', 'pluginforge')}
+            <p className="appfoundry-stat-detail">
+              {totalConnections} {__('total registered', 'rb-app-foundry')}
             </p>
           </CardBody>
         </Card>
 
         <Card>
           <CardHeader>
-            <h2>{__('Quick Start', 'pluginforge')}</h2>
+            <h2>{__('Quick Start', 'rb-app-foundry')}</h2>
           </CardHeader>
           <CardBody>
-            <ol className="pluginforge-quickstart">
-              <li>{__('Activate the add-ons you need', 'pluginforge')}</li>
-              <li>{__('Configure your platform connections', 'pluginforge')}</li>
-              <li>{__('Adjust settings for each add-on', 'pluginforge')}</li>
+            <ol className="appfoundry-quickstart">
+              <li>{__('Activate the add-ons you need', 'rb-app-foundry')}</li>
+              <li>{__('Configure your platform connections', 'rb-app-foundry')}</li>
+              <li>{__('Adjust settings for each add-on', 'rb-app-foundry')}</li>
             </ol>
           </CardBody>
         </Card>
       </div>
 
       {activeAddons.length === 0 && (
-        <Card className="pluginforge-empty-state">
+        <Card className="appfoundry-empty-state">
           <CardBody>
             <p>
               {__(
                 'No add-ons are active yet. Head over to the Add-ons tab to get started!',
-                'pluginforge'
+                'rb-app-foundry'
               )}
             </p>
           </CardBody>

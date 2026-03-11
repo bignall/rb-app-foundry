@@ -26,16 +26,16 @@ const App = () => {
     const fetchData = async () => {
       try {
         const [addonsData, connectionsData, settingsData] = await Promise.all([
-          apiFetch({ path: '/pluginforge/v1/addons' }),
-          apiFetch({ path: '/pluginforge/v1/connections' }),
-          apiFetch({ path: '/pluginforge/v1/settings' }),
+          apiFetch({ path: '/rb-app-foundry/v1/addons' }),
+          apiFetch({ path: '/rb-app-foundry/v1/connections' }),
+          apiFetch({ path: '/rb-app-foundry/v1/settings' }),
         ]);
 
         setAddons(addonsData);
         setConnections(connectionsData);
         setSettings(settingsData);
       } catch (err) {
-        setError(err.message || __('Failed to load plugin data.', 'pluginforge'));
+        setError(err.message || __('Failed to load plugin data.', 'rb-app-foundry'));
       } finally {
         setLoading(false);
       }
@@ -47,7 +47,7 @@ const App = () => {
   // Refresh add-ons data after activation/deactivation.
   const refreshAddons = async () => {
     try {
-      const addonsData = await apiFetch({ path: '/pluginforge/v1/addons' });
+      const addonsData = await apiFetch({ path: '/rb-app-foundry/v1/addons' });
       setAddons(addonsData);
     } catch (err) {
       setError(err.message);
@@ -57,7 +57,7 @@ const App = () => {
   // Refresh connections data.
   const refreshConnections = async () => {
     try {
-      const connectionsData = await apiFetch({ path: '/pluginforge/v1/connections' });
+      const connectionsData = await apiFetch({ path: '/rb-app-foundry/v1/connections' });
       setConnections(connectionsData);
     } catch (err) {
       setError(err.message);
@@ -66,9 +66,9 @@ const App = () => {
 
   if (loading) {
     return (
-      <div className="pluginforge-loading">
+      <div className="appfoundry-loading">
         <Spinner />
-        <p>{__('Loading PluginForge...', 'pluginforge')}</p>
+        <p>{__('Loading RB App Foundry...', 'rb-app-foundry')}</p>
       </div>
     );
   }
@@ -77,23 +77,23 @@ const App = () => {
   const coreTabs = [
     {
       name: 'dashboard',
-      title: __('Dashboard', 'pluginforge'),
-      className: 'pluginforge-tab-dashboard',
+      title: __('Dashboard', 'rb-app-foundry'),
+      className: 'appfoundry-tab-dashboard',
     },
     {
       name: 'addons',
-      title: __('Add-ons', 'pluginforge'),
-      className: 'pluginforge-tab-addons',
+      title: __('Add-ons', 'rb-app-foundry'),
+      className: 'appfoundry-tab-addons',
     },
     {
       name: 'connections',
-      title: __('Connections', 'pluginforge'),
-      className: 'pluginforge-tab-connections',
+      title: __('Connections', 'rb-app-foundry'),
+      className: 'appfoundry-tab-connections',
     },
     {
       name: 'settings',
-      title: __('Settings', 'pluginforge'),
-      className: 'pluginforge-tab-settings',
+      title: __('Settings', 'rb-app-foundry'),
+      className: 'appfoundry-tab-settings',
     },
   ];
 
@@ -140,11 +140,11 @@ const App = () => {
   };
 
   return (
-    <div className="pluginforge-admin">
-      <div className="pluginforge-header">
-        <h1>{__('PluginForge', 'pluginforge')}</h1>
-        <span className="pluginforge-version">
-          v{window.pluginForgeData?.version || '1.0.0'}
+    <div className="appfoundry-admin">
+      <div className="appfoundry-header">
+        <h1>{__('RB App Foundry', 'rb-app-foundry')}</h1>
+        <span className="appfoundry-version">
+          v{window.appFoundryData?.version || '1.0.0'}
         </span>
       </div>
 
@@ -155,7 +155,7 @@ const App = () => {
       )}
 
       <TabPanel
-        className="pluginforge-tabs"
+        className="appfoundry-tabs"
         tabs={coreTabs}
       >
         {renderTab}

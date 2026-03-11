@@ -26,7 +26,7 @@ const Settings = ({ settings, addons }) => {
     setSaving(true);
     try {
       await apiFetch({
-        path: '/pluginforge/v1/settings',
+        path: '/rb-app-foundry/v1/settings',
         method: 'POST',
         data: {
           general: {
@@ -34,11 +34,11 @@ const Settings = ({ settings, addons }) => {
           },
         },
       });
-      setNotice({ status: 'success', message: __('Settings saved.', 'pluginforge') });
+      setNotice({ status: 'success', message: __('Settings saved.', 'rb-app-foundry') });
     } catch (err) {
       setNotice({
         status: 'error',
-        message: err.message || __('Failed to save settings.', 'pluginforge'),
+        message: err.message || __('Failed to save settings.', 'rb-app-foundry'),
       });
     } finally {
       setSaving(false);
@@ -46,7 +46,7 @@ const Settings = ({ settings, addons }) => {
   };
 
   return (
-    <div className="pluginforge-settings">
+    <div className="appfoundry-settings">
       {notice && (
         <Notice
           status={notice.status}
@@ -59,14 +59,14 @@ const Settings = ({ settings, addons }) => {
 
       <Card>
         <CardHeader>
-          <h2>{__('General Settings', 'pluginforge')}</h2>
+          <h2>{__('General Settings', 'rb-app-foundry')}</h2>
         </CardHeader>
         <CardBody>
           <ToggleControl
-            label={__('Delete all data on uninstall', 'pluginforge')}
+            label={__('Delete all data on uninstall', 'rb-app-foundry')}
             help={__(
               'When enabled, all plugin data (settings, posts, tables) will be removed when the plugin is deleted.',
-              'pluginforge'
+              'rb-app-foundry'
             )}
             checked={generalSettings.delete_data_on_uninstall || false}
             onChange={(value) =>
@@ -77,9 +77,9 @@ const Settings = ({ settings, addons }) => {
             }
           />
 
-          <div className="pluginforge-settings-actions">
+          <div className="appfoundry-settings-actions">
             <Button variant="primary" onClick={saveSettings} isBusy={saving}>
-              {__('Save Settings', 'pluginforge')}
+              {__('Save Settings', 'rb-app-foundry')}
             </Button>
           </div>
         </CardBody>
@@ -88,15 +88,15 @@ const Settings = ({ settings, addons }) => {
       {/* Dynamic add-on settings sections */}
       {settings?.addons &&
         Object.entries(settings.addons).map(([addonId, addonData]) => (
-          <Card key={addonId} className="pluginforge-addon-settings">
+          <Card key={addonId} className="appfoundry-addon-settings">
             <CardHeader>
-              <h2>{addonData.name} {__('Settings', 'pluginforge')}</h2>
+              <h2>{addonData.name} {__('Settings', 'rb-app-foundry')}</h2>
             </CardHeader>
             <CardBody>
               <p className="description">
                 {__(
                   'Settings for this add-on will appear here when the add-on provides a settings schema.',
-                  'pluginforge'
+                  'rb-app-foundry'
                 )}
               </p>
             </CardBody>

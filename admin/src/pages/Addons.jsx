@@ -27,7 +27,7 @@ const Addons = ({ addons, onRefresh }) => {
 
     try {
       await apiFetch({
-        path: `/pluginforge/v1/addons/${id}/${action}`,
+        path: `/rb-app-foundry/v1/addons/${id}/${action}`,
         method: 'POST',
       });
 
@@ -60,7 +60,7 @@ const Addons = ({ addons, onRefresh }) => {
   };
 
   return (
-    <div className="pluginforge-addons">
+    <div className="appfoundry-addons">
       {notices.map((notice) => (
         <Notice
           key={notice.id}
@@ -78,37 +78,37 @@ const Addons = ({ addons, onRefresh }) => {
             <p>
               {__(
                 'No add-ons found. Add add-on folders to the addons/ directory to get started.',
-                'pluginforge'
+                'rb-app-foundry'
               )}
             </p>
           </CardBody>
         </Card>
       ) : (
-        <div className="pluginforge-addons-grid">
+        <div className="appfoundry-addons-grid">
           {addons.map((addon) => (
-            <Card key={addon.id} className="pluginforge-addon-card">
+            <Card key={addon.id} className="appfoundry-addon-card">
               <CardHeader>
-                <div className="pluginforge-addon-header">
+                <div className="appfoundry-addon-header">
                   <h3>{addon.name}</h3>
-                  <span className="pluginforge-addon-version">v{addon.version}</span>
+                  <span className="appfoundry-addon-version">v{addon.version}</span>
                 </div>
               </CardHeader>
               <CardBody>
-                <p className="pluginforge-addon-description">{addon.description}</p>
+                <p className="appfoundry-addon-description">{addon.description}</p>
 
                 {addon.dependencies.length > 0 && (
-                  <p className="pluginforge-addon-deps">
-                    <strong>{__('Requires:', 'pluginforge')}</strong>{' '}
+                  <p className="appfoundry-addon-deps">
+                    <strong>{__('Requires:', 'rb-app-foundry')}</strong>{' '}
                     {addon.dependencies.join(', ')}
                   </p>
                 )}
 
-                <div className="pluginforge-addon-toggle">
+                <div className="appfoundry-addon-toggle">
                   {loading[addon.id] ? (
                     <Spinner />
                   ) : (
                     <ToggleControl
-                      label={addon.active ? __('Active', 'pluginforge') : __('Inactive', 'pluginforge')}
+                      label={addon.active ? __('Active', 'rb-app-foundry') : __('Inactive', 'rb-app-foundry')}
                       checked={addon.active}
                       onChange={() => toggleAddon(addon.id, addon.active)}
                     />

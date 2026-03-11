@@ -40,21 +40,21 @@ const CredentialsForm = ({ connection, onSaved, onCancel }) => {
     setError(null);
     try {
       await apiFetch({
-        path: `/pluginforge/v1/connections/${connection.id}/credentials`,
+        path: `/rb-app-foundry/v1/connections/${connection.id}/credentials`,
         method: 'POST',
         data: values,
       });
       setValues({});
       await onSaved();
     } catch (err) {
-      setError(err.message || __('Failed to save credentials.', 'pluginforge'));
+      setError(err.message || __('Failed to save credentials.', 'rb-app-foundry'));
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div className="pluginforge-connection-form">
+    <div className="appfoundry-connection-form">
       {error && (
         <Notice status="error" isDismissible onDismiss={() => setError(null)}>
           {error}
@@ -71,18 +71,18 @@ const CredentialsForm = ({ connection, onSaved, onCancel }) => {
           autoComplete={field.type === 'password' ? 'new-password' : 'off'}
         />
       ))}
-      <div className="pluginforge-connection-form-actions">
+      <div className="appfoundry-connection-form-actions">
         <Button
           variant="primary"
           isBusy={saving}
           disabled={saving || !allRequiredFilled}
           onClick={handleSave}
         >
-          {saving ? __('Saving…', 'pluginforge') : __('Save & Continue', 'pluginforge')}
+          {saving ? __('Saving…', 'rb-app-foundry') : __('Save & Continue', 'rb-app-foundry')}
         </Button>
         {onCancel && (
           <Button variant="tertiary" disabled={saving} onClick={onCancel}>
-            {__('Cancel', 'pluginforge')}
+            {__('Cancel', 'rb-app-foundry')}
           </Button>
         )}
       </div>
@@ -127,12 +127,12 @@ const ConnectionCard = ({ connection, onRefresh }) => {
     setNotice(null);
     try {
       await apiFetch({
-        path: `/pluginforge/v1/connections/${connection.id}/credentials`,
+        path: `/rb-app-foundry/v1/connections/${connection.id}/credentials`,
         method: 'DELETE',
       });
       await onRefresh();
     } catch (err) {
-      setNotice({ status: 'error', message: err.message || __('Failed to remove connection.', 'pluginforge') });
+      setNotice({ status: 'error', message: err.message || __('Failed to remove connection.', 'rb-app-foundry') });
     } finally {
       setDisconnecting(false);
     }
@@ -143,12 +143,12 @@ const ConnectionCard = ({ connection, onRefresh }) => {
     setNotice(null);
     try {
       await apiFetch({
-        path: `/pluginforge/v1/connections/${connection.id}/accounts`,
+        path: `/rb-app-foundry/v1/connections/${connection.id}/accounts`,
         method: 'DELETE',
       });
       await onRefresh();
     } catch (err) {
-      setNotice({ status: 'error', message: err.message || __('Failed to disconnect accounts.', 'pluginforge') });
+      setNotice({ status: 'error', message: err.message || __('Failed to disconnect accounts.', 'rb-app-foundry') });
     } finally {
       setDisconnectingAll(false);
     }
@@ -159,12 +159,12 @@ const ConnectionCard = ({ connection, onRefresh }) => {
     setNotice(null);
     try {
       await apiFetch({
-        path: `/pluginforge/v1/connections/${connection.id}/accounts/${accountId}`,
+        path: `/rb-app-foundry/v1/connections/${connection.id}/accounts/${accountId}`,
         method: 'DELETE',
       });
       await onRefresh();
     } catch (err) {
-      setNotice({ status: 'error', message: err.message || __('Failed to remove account.', 'pluginforge') });
+      setNotice({ status: 'error', message: err.message || __('Failed to remove account.', 'rb-app-foundry') });
     } finally {
       setRemovingAccount(null);
     }
@@ -175,11 +175,11 @@ const ConnectionCard = ({ connection, onRefresh }) => {
     setNotice(null);
     try {
       const { url } = await apiFetch({
-        path: `/pluginforge/v1/connections/${connection.id}/oauth-url`,
+        path: `/rb-app-foundry/v1/connections/${connection.id}/oauth-url`,
       });
       window.location.href = url;
     } catch (err) {
-      setNotice({ status: 'error', message: err.message || __('Failed to start OAuth flow.', 'pluginforge') });
+      setNotice({ status: 'error', message: err.message || __('Failed to start OAuth flow.', 'rb-app-foundry') });
       setOauthLoading(false);
     }
   };
@@ -213,16 +213,16 @@ const ConnectionCard = ({ connection, onRefresh }) => {
     // OAuth2: app credentials saved but not yet OAuth-connected.
     if (isOAuth && !connection.connected && connection.app_configured) {
       return (
-        <div className="pluginforge-connection-oauth">
-          <p className="pluginforge-connection-hint">
-            {__('App credentials saved. Connect a Facebook account to complete the setup.', 'pluginforge')}
+        <div className="appfoundry-connection-oauth">
+          <p className="appfoundry-connection-hint">
+            {__('App credentials saved. Connect a Facebook account to complete the setup.', 'rb-app-foundry')}
           </p>
-          <div className="pluginforge-connection-actions">
+          <div className="appfoundry-connection-actions">
             <Button variant="primary" isBusy={oauthLoading} disabled={oauthLoading} onClick={handleOAuth}>
-              {oauthLoading ? <Spinner /> : __('Connect Facebook Account', 'pluginforge')}
+              {oauthLoading ? <Spinner /> : __('Connect Facebook Account', 'rb-app-foundry')}
             </Button>
             <Button variant="tertiary" onClick={() => setMode('edit_credentials')}>
-              {__('Update App Credentials', 'pluginforge')}
+              {__('Update App Credentials', 'rb-app-foundry')}
             </Button>
           </div>
         </div>
@@ -232,16 +232,16 @@ const ConnectionCard = ({ connection, onRefresh }) => {
     // Connected — show account list.
     const accounts = connection.accounts || [];
     return (
-      <div className="pluginforge-connection-connected">
-        <ul className="pluginforge-accounts-list">
+      <div className="appfoundry-connection-connected">
+        <ul className="appfoundry-accounts-list">
           {accounts.map((account) => (
-            <li key={account.id} className="pluginforge-account-item">
-              <span className="pluginforge-account-info">
+            <li key={account.id} className="appfoundry-account-item">
+              <span className="appfoundry-account-info">
                 <strong>{account.name}</strong>
-                <span className="pluginforge-account-pages">
+                <span className="appfoundry-account-pages">
                   {account.page_count} {account.page_count === 1
-                    ? __('page', 'pluginforge')
-                    : __('pages', 'pluginforge')}
+                    ? __('page', 'rb-app-foundry')
+                    : __('pages', 'rb-app-foundry')}
                 </span>
               </span>
               <Button
@@ -251,17 +251,17 @@ const ConnectionCard = ({ connection, onRefresh }) => {
                 disabled={!!removingAccount || disconnectingAll}
                 onClick={() => handleRemoveAccount(account.id)}
               >
-                {__('Remove', 'pluginforge')}
+                {__('Remove', 'rb-app-foundry')}
               </Button>
             </li>
           ))}
         </ul>
-        <div className="pluginforge-connection-actions">
+        <div className="appfoundry-connection-actions">
           <Button variant="primary" isBusy={oauthLoading} disabled={oauthLoading || !!removingAccount} onClick={handleOAuth}>
-            {oauthLoading ? <Spinner /> : __('Add Account', 'pluginforge')}
+            {oauthLoading ? <Spinner /> : __('Add Account', 'rb-app-foundry')}
           </Button>
           <Button variant="secondary" onClick={() => setMode('edit_credentials')} disabled={!!removingAccount}>
-            {__('Update App Credentials', 'pluginforge')}
+            {__('Update App Credentials', 'rb-app-foundry')}
           </Button>
           <Button
             variant="link"
@@ -270,7 +270,7 @@ const ConnectionCard = ({ connection, onRefresh }) => {
             disabled={disconnectingAll || !!removingAccount}
             onClick={handleDisconnectAll}
           >
-            {__('Disconnect All Accounts', 'pluginforge')}
+            {__('Disconnect All Accounts', 'rb-app-foundry')}
           </Button>
           <Button
             variant="link"
@@ -279,7 +279,7 @@ const ConnectionCard = ({ connection, onRefresh }) => {
             disabled={disconnecting || !!removingAccount || disconnectingAll}
             onClick={handleRemoveConnection}
           >
-            {__('Remove Connection', 'pluginforge')}
+            {__('Remove Connection', 'rb-app-foundry')}
           </Button>
         </div>
       </div>
@@ -287,19 +287,19 @@ const ConnectionCard = ({ connection, onRefresh }) => {
   };
 
   return (
-    <Card className="pluginforge-connection-card">
+    <Card className="appfoundry-connection-card">
       <CardHeader>
-        <div className="pluginforge-connection-header">
+        <div className="appfoundry-connection-header">
           <h3>{connection.name}</h3>
-          <span className={`pluginforge-connection-status ${connection.connected ? 'connected' : 'disconnected'}`}>
+          <span className={`appfoundry-connection-status ${connection.connected ? 'connected' : 'disconnected'}`}>
             <Dashicon icon={connection.connected ? 'yes-alt' : 'dismiss'} />
             {connection.connected
               ? connection.accounts?.length > 1
-                ? `${connection.accounts.length} ${__('accounts', 'pluginforge')}`
-                : __('Connected', 'pluginforge')
+                ? `${connection.accounts.length} ${__('accounts', 'rb-app-foundry')}`
+                : __('Connected', 'rb-app-foundry')
               : isOAuth && connection.app_configured
-                ? __('Awaiting Authorization', 'pluginforge')
-                : __('Not Connected', 'pluginforge')}
+                ? __('Awaiting Authorization', 'rb-app-foundry')
+                : __('Not Connected', 'rb-app-foundry')}
           </span>
         </div>
       </CardHeader>
@@ -309,8 +309,8 @@ const ConnectionCard = ({ connection, onRefresh }) => {
             {notice.message}
           </Notice>
         )}
-        <p className="pluginforge-connection-auth">
-          <strong>{__('Auth:', 'pluginforge')}</strong> {connection.auth_type}
+        <p className="appfoundry-connection-auth">
+          <strong>{__('Auth:', 'rb-app-foundry')}</strong> {connection.auth_type}
         </p>
         {renderBody()}
       </CardBody>
@@ -323,10 +323,10 @@ const Connections = ({ connections, onRefresh }) => {
 
   if (connectionList.length === 0) {
     return (
-      <div className="pluginforge-connections">
+      <div className="appfoundry-connections">
         <Card>
           <CardBody>
-            <p>{__('No connections registered yet. Activate add-ons that provide platform connections.', 'pluginforge')}</p>
+            <p>{__('No connections registered yet. Activate add-ons that provide platform connections.', 'rb-app-foundry')}</p>
           </CardBody>
         </Card>
       </div>
@@ -334,8 +334,8 @@ const Connections = ({ connections, onRefresh }) => {
   }
 
   return (
-    <div className="pluginforge-connections">
-      <div className="pluginforge-connections-grid">
+    <div className="appfoundry-connections">
+      <div className="appfoundry-connections-grid">
         {connectionList.map((connection) => (
           <ConnectionCard key={connection.id} connection={connection} onRefresh={onRefresh} />
         ))}
