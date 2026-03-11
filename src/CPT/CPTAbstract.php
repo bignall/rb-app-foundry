@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-defined( 'ABSPATH' ) || exit;
 
 namespace RBCS\AppForge\CPT;
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Abstract base class for custom post types.

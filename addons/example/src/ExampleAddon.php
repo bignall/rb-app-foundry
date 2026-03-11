@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-defined( 'ABSPATH' ) || exit;
 
 namespace RBCS\AppForge\Addons\Example;
+
+defined( 'ABSPATH' ) || exit;
 
 use RBCS\AppForge\Addon\AddonAbstract;
 use WP_REST_Request;

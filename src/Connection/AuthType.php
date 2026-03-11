@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-defined( 'ABSPATH' ) || exit;
 
 namespace RBCS\AppForge\Connection;
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Authentication types supported by connections.

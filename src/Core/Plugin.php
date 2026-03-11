@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-defined( 'ABSPATH' ) || exit;
 
 namespace RBCS\AppForge\Core;
+
+defined( 'ABSPATH' ) || exit;
 
 use RBCS\AppForge\Addon\AddonManager;
 use RBCS\AppForge\Admin\AdminPage;

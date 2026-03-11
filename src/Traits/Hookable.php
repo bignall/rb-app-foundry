@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-defined( 'ABSPATH' ) || exit;
 
 namespace RBCS\AppForge\Traits;
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Trait for easy WordPress hook registration.
