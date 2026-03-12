@@ -1,6 +1,6 @@
 # RB App Foundry
 
-A modern, lightweight WordPress plugin starter framework with an add-on architecture, PSR-4 autoloading, and React admin panels.
+A WordPress framework plugin with an add-on architecture, connection management, encrypted credential storage, and a React admin panel.
 
 Built by [RB Creative Solutions LLC](https://rbcreativesolutions.net).
 
@@ -8,54 +8,33 @@ Built by [RB Creative Solutions LLC](https://rbcreativesolutions.net).
 
 ## What is RB App Foundry?
 
-RB App Foundry is a **starter framework** for building WordPress plugins. It gives you a solid, opinionated foundation so you can focus on your plugin's features instead of reinventing boilerplate.
+RB App Foundry is a **WordPress framework plugin** that other plugins depend on. It provides the scaffolding — add-on discovery, connection management, credential encryption, REST API infrastructure — so dependent plugins can focus on their own features.
 
-### Key Features
+### What it provides
 
-- **Add-on Architecture** — Features live in self-contained add-ons that can be activated/deactivated. Inactive add-ons don't load any PHP at all.
-- **PSR-4 Autoloading** — Classes load on demand via Composer. No manual `require` spaghetti.
-- **Connection Abstraction** — A consistent interface for connecting to external platforms (social media, AI, APIs) with built-in credential encryption, token refresh, and rate limiting.
-- **React Admin Panel** — Modern settings UI built with `@wordpress/scripts`, featuring dynamic tabs that appear based on active add-ons.
-- **CPT & Taxonomy Abstractions** — Clean, declarative base classes for registering custom post types and taxonomies.
-- **Minimal Footprint** — Nothing loads unless it's needed. The framework stays out of WordPress's regular flow to keep page loads fast.
-- **PHP 8.0+** — Takes advantage of typed properties, enums, named arguments, and union types.
+- **Add-on Architecture** — Self-contained feature modules. Inactive add-ons load zero PHP.
+- **Connection Abstraction** — A consistent interface for external API integrations with AES-256-CBC credential encryption and token refresh.
+- **React Admin Panel** — `@wordpress/scripts`-based settings UI with dynamic tabs per active add-on.
+- **CPT & Taxonomy Base Classes** — Declarative registration — define properties, call `register()`.
+- **REST API** — Framework management endpoints under `/rb-app-foundry/v1/`.
+- **PHP 8.0+** — Typed properties, enums, readonly constructor promotion.
 
 ---
 
 ## Requirements
 
-- **PHP** 8.0 or higher
 - **WordPress** 6.4 or higher
+- **PHP** 8.0 or higher
 - **Composer** (for autoloading)
-- **Node.js** 18+ and npm (for building the React admin)
+- **Node.js** 18+ and npm (for rebuilding the React admin, development only)
 
 ---
 
-## Getting Started
+## Installation
 
-### 1. Clone or Download
+Install from the [WordPress Plugin Directory](https://wordpress.org/plugins/rb-app-foundry/) or upload `rb-app-foundry.zip` manually. Activate before any plugin that depends on it.
 
-```bash
-git clone https://github.com/bignall/app-forge.git
-cd rb-app-foundry
-```
-
-### 2. Install Dependencies
-
-```bash
-# PHP autoloader
-composer install
-
-# JavaScript dependencies (for the admin panel)
-cd admin
-npm install
-npm run build
-cd ..
-```
-
-### 3. Install in WordPress
-
-Copy or symlink the `rb-app-foundry` directory into your WordPress `wp-content/plugins/` directory, then activate it from the WordPress admin.
+For local development, see `docs/local-development-setup.md`.
 
 ---
 
@@ -63,262 +42,117 @@ Copy or symlink the `rb-app-foundry` directory into your WordPress `wp-content/p
 
 ```
 rb-app-foundry/
-├── rb-app-foundry.php        # Main plugin file (minimal bootstrap)
+├── rb-app-foundry.php        # Bootstrap: constants, Composer autoload, plugin init
 ├── composer.json             # PSR-4 autoloading
 ├── uninstall.php             # Clean uninstall handler
 │
-├── src/                      # Core framework (RBCS\AppFoundry)
-│   ├── Core/                 # Plugin orchestrator, activator, deactivator, assets
-│   ├── Addon/                # Add-on system (interface, abstract, manager, proxy)
-│   ├── Admin/                # Admin page, REST API, settings manager
-│   ├── CPT/                  # Custom post type & taxonomy abstractions
-│   ├── Connection/           # Platform connection abstractions
-│   └── Traits/               # Reusable traits (HasSettings, Hookable, Renderable)
+├── src/                      # Core framework — namespace RBCS\AppFoundry
+│   ├── Core/                 # Plugin singleton, Assets
+│   ├── Addon/                # AddonInterface, AddonManager, InactiveAddonProxy
+│   ├── Admin/                # AdminPage, RestAPI
+│   ├── CPT/                  # CPTAbstract, TaxonomyAbstract
+│   ├── Connection/           # ConnectionInterface, ConnectionAbstract, ConnectionResponse, AuthType
+│   └── Traits/               # Hookable
 │
-├── addons/                   # Add-on directory (each add-on is a subfolder)
-├── admin/                    # React admin app source
-├── templates/                # PHP template files
-├── languages/                # i18n translation files
-└── assets/                   # Static assets (CSS, JS, images)
+├── addons/                   # Framework's own add-ons (example add-on included)
+├── admin/                    # React admin app source (@wordpress/scripts)
+├── admin/build/              # Compiled admin assets (committed)
+├── languages/                # i18n .pot file
+└── docs/                     # Documentation
+    ├── user/                 # End-user docs
+    └── developer/            # Developer docs
 ```
 
 ---
 
-## Creating an Add-on
+## Developer Documentation
 
-Add-ons are the primary way to extend RB App Foundry. Each add-on is a self-contained folder inside `addons/`.
+Full developer docs (boot sequence, REST API, hooks, add-on guide with code examples) live alongside the primary consumer plugin:
 
-### 1. Create the add-on directory
+| Doc | Link |
+|-----|------|
+| **Developer overview** (this repo) | [docs/developer/overview.md](docs/developer/overview.md) |
+| Architecture & boot sequence | [RB SocialPillar — architecture.md](https://github.com/bignall/social-pillar/blob/main/docs/developer/architecture.md) |
+| REST API reference | [RB SocialPillar — rest-api.md](https://github.com/bignall/social-pillar/blob/main/docs/developer/rest-api.md) |
+| Hooks reference | [RB SocialPillar — hooks.md](https://github.com/bignall/social-pillar/blob/main/docs/developer/hooks.md) |
+| Building an add-on or connection | [RB SocialPillar — building-an-addon.md](https://github.com/bignall/social-pillar/blob/main/docs/developer/building-an-addon.md) |
 
-```
-addons/
-└── my-feature/
-    ├── addon.json
-    ├── src/
-    │   └── MyFeatureAddon.php
-    └── assets/        (optional)
-```
+---
 
-### 2. Define `addon.json`
-
-```json
-{
-    "id": "my-feature",
-    "name": "My Feature",
-    "description": "Does something awesome.",
-    "version": "1.0.0",
-    "author": "Your Name",
-    "default_active": false,
-    "dependencies": [],
-    "namespace": "RBCS\\SocialPillar\\Addons\\MyFeature",
-    "entry_class": "RBCS\\SocialPillar\\Addons\\MyFeature\\MyFeatureAddon"
-}
-```
-
-### 3. Create the add-on class
+## Quick Example — Add-on
 
 ```php
 <?php
+// addons/my-feature/src/MyFeatureAddon.php
 
 declare(strict_types=1);
 
-namespace RBCS\SocialPillar\Addons\MyFeature;
+namespace MyPlugin\Addons\MyFeature;
 
-use RBCS\AppFoundry\Addon\AddonAbstract;
+defined('ABSPATH') || exit;
 
-class MyFeatureAddon extends AddonAbstract
+use RBCS\AppFoundry\Addon\AddonInterface;
+use RBCS\AppFoundry\Core\Plugin;
+
+class MyFeatureAddon implements AddonInterface
 {
-    public function getId(): string
-    {
-        return 'my-feature';
-    }
+    public function __construct(private readonly Plugin $framework) {}
+
+    public function getId(): string           { return 'my-feature'; }
+    public function getName(): string         { return 'My Feature'; }
+    public function getDescription(): string  { return 'Does something.'; }
+    public function getVersion(): string      { return '1.0.0'; }
+    public function isActiveByDefault(): bool { return false; }
+    public function getDependencies(): array  { return []; }
+    public function getSettingsSchema(): array { return []; }
+    public function activate(): void   {}
+    public function deactivate(): void {}
+    public function registerRoutes(): void {}
 
     public function boot(): void
     {
-        // Register hooks, CPTs, shortcodes, blocks, etc.
-        // This only runs when the add-on is active.
-    }
-
-    public function activate(): void
-    {
-        // First-time activation: create tables, set defaults, etc.
-    }
-
-    public function getSettingsSchema(): array
-    {
-        return [
-            [
-                'id'      => 'enabled',
-                'type'    => 'toggle',
-                'label'   => 'Enable Feature',
-                'default' => true,
-            ],
-        ];
-    }
-
-    public function registerRoutes(): void
-    {
-        // Register REST API endpoints for this add-on.
+        // Register hooks, CPTs, connections — only runs when active
+        add_action('init', [$this, 'registerCPT']);
     }
 }
 ```
 
-### 4. Activate it
-
-Go to **RB App Foundry → Add-ons** in the WordPress admin and toggle your add-on on.
-
----
-
-## Creating a Connection
-
-Connections provide a consistent interface for communicating with external platforms.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace RBCS\SocialPillar\Connections;
-
-use RBCS\AppFoundry\Connection\AuthType;
-use RBCS\AppFoundry\Connection\ConnectionAbstract;
-use RBCS\AppFoundry\Connection\ConnectionResponse;
-
-class FacebookConnection extends ConnectionAbstract
+```json
+// addons/my-feature/addon.json
 {
-    public function getId(): string
-    {
-        return 'facebook';
-    }
-
-    public function getName(): string
-    {
-        return 'Facebook';
-    }
-
-    public function getAuthType(): AuthType
-    {
-        return AuthType::OAuth2;
-    }
-
-    public function getAuthFields(): array
-    {
-        return [
-            ['id' => 'app_id',     'type' => 'text',     'label' => 'App ID'],
-            ['id' => 'app_secret', 'type' => 'password', 'label' => 'App Secret'],
-        ];
-    }
-
-    public function authenticate(array $credentials): bool
-    {
-        // Implement OAuth2 flow...
-        $this->storeCredentials($credentials);
-        return true;
-    }
-
-    public function refreshToken(): bool
-    {
-        // Implement token refresh...
-        return true;
-    }
-
-    public function request(string $method, string $endpoint, array $data = []): ConnectionResponse
-    {
-        $credentials = $this->getStoredCredentials();
-        $baseUrl = 'https://graph.facebook.com/v18.0';
-
-        return $this->httpRequest($method, "{$baseUrl}/{$endpoint}", [
-            'headers' => [
-                'Authorization' => 'Bearer ' . ($credentials['access_token'] ?? ''),
-            ],
-            'body' => $data,
-        ]);
-    }
+    "id": "my-feature",
+    "name": "My Feature",
+    "description": "Does something.",
+    "version": "1.0.0",
+    "namespace": "MyPlugin\\Addons\\MyFeature",
+    "entry_class": "MyPlugin\\Addons\\MyFeature\\MyFeatureAddon",
+    "default_active": false,
+    "dependencies": []
 }
-```
-
-Register connections in your add-on's `boot()` method:
-
-```php
-public function boot(): void
-{
-    $connectionManager = $this->plugin->getConnectionManager();
-    $connectionManager->register(new FacebookConnection());
-}
-```
-
----
-
-## Creating Custom Post Types
-
-```php
-<?php
-
-namespace RBCS\SocialPillar\CPT;
-
-use RBCS\AppFoundry\CPT\CPTAbstract;
-
-class SocialPostCPT extends CPTAbstract
-{
-    protected string $slug = 'pf_social_post';
-    protected string $singular = 'Social Post';
-    protected string $plural = 'Social Posts';
-    protected string $icon = 'dashicons-share';
-    protected array $supports = ['title', 'editor', 'thumbnail'];
-}
-```
-
-Register in your add-on's `boot()`:
-
-```php
-$cpt = new SocialPostCPT();
-$cpt->register();
 ```
 
 ---
 
 ## Development
 
-### Building the Admin Panel
+### Build Admin Panel
 
 ```bash
 cd admin
-npm run start   # Development with hot reload
-npm run build   # Production build
+npm install
+npm run start   # Watch mode
+npm run build   # Production
 ```
 
-### Code Quality
+### Deploy to LocalWP
 
-```bash
-composer phpcs     # PHP CodeSniffer
-composer phpstan   # Static analysis
-composer test      # PHPUnit tests
-```
-
----
-
-## Security
-
-- All REST endpoints require `manage_options` capability
-- Sensitive credentials (API keys, tokens) are encrypted using OpenSSL before storage
-- All user inputs are sanitized and validated
-- Nonce verification on all admin actions
+See `docs/local-development-setup.md` (or use RB SocialPillar's `bin/deploy-local.sh` which builds both).
 
 ---
 
 ## License
 
 GPL v2 or later. See [LICENSE](LICENSE) for details.
-
----
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ---
 
