@@ -1,0 +1,141 @@
+name: Release
+
+# Triggers on any tag like v0.2.0, v1.0.0, v1.1.0-beta.1, etc.
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Build & Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # Required to create GitHub Releases
+
+    steps:
+      # ── Checkout ────────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── PHP & Composer ───────────────────────────────────────────────────────
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: |
+          composer install \
+            --no-dev \
+            --optimize-autoloader \
+            --no-interaction \
+            --prefer-dist
+
+      # ── Node.js & React admin ────────────────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: admin/package-lock.json
+
+      - name: Build React admin panel
+        run: |
+          cd admin
+          npm ci
+          npm run build
+
+      # ── Parse version from tag ───────────────────────────────────────────────
+      - name: Get version from tag
+        id: version
+        run: |
+          # Strip leading 'v' — tag v0.2.0 → version 0.2.0
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+          # Mark as pre-release if tag contains beta, alpha, or rc
+          if [[ "$GITHUB_REF_NAME" =~ (beta|alpha|rc) ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ── Extract changelog section ────────────────────────────────────────────
+      - name: Extract release notes from CHANGELOG.md
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # Pull out everything between "## [VERSION]" and the next "## [" header
+          awk "/^## \[$VERSION\]/{flag=1; next} /^## \[/{flag=0} flag" CHANGELOG.md \
+            | sed '/^---$/d' \
+            | sed '/^[[:space:]]*$/{ N; /^\n[[:space:]]*$/d }' \
+            > release_notes.md
+          if [[ ! -s release_notes.md ]]; then
+            echo "No changelog entry found for v$VERSION — check CHANGELOG.md" >> release_notes.md
+          fi
+          echo "Release notes preview:"
+          cat release_notes.md
+
+      # ── Assemble ZIP ─────────────────────────────────────────────────────────
+      - name: Assemble plugin ZIP
+        run: |
+          PLUGIN_SLUG="rb-app-foundry"
+          VERSION="${{ steps.version.outputs.version }}"
+          STAGE_DIR="/tmp/$PLUGIN_SLUG"
+
+          mkdir -p "$STAGE_DIR"
+
+          rsync -a \
+            --exclude=".git" \
+            --exclude=".gitignore" \
+            --exclude=".gitattributes" \
+            --exclude=".editorconfig" \
+            --exclude=".DS_Store" \
+            --exclude=".env" \
+            --exclude=".env.*" \
+            --exclude="*.log" \
+            --exclude="bin/" \
+            --exclude="tests/" \
+            --exclude="coverage/" \
+            --exclude="dist/" \
+            --exclude="node_modules/" \
+            --exclude="admin/node_modules/" \
+            --exclude="admin/src/" \
+            --exclude="admin/package.json" \
+            --exclude="admin/package-lock.json" \
+            --exclude=".phpunit.result.cache" \
+            --exclude="phpunit.xml" \
+            --exclude="phpcs.xml" \
+            --exclude="phpstan.neon" \
+            --exclude=".claude" \
+            --exclude="*.md" \
+            --exclude=".github/" \
+            ./ "$STAGE_DIR/"
+
+          # Sanity check
+          if [[ ! -f "$STAGE_DIR/vendor/autoload.php" ]]; then
+            echo "ERROR: vendor/autoload.php missing — Composer install may have failed"
+            exit 1
+          fi
+
+          mkdir -p dist
+          cd /tmp
+          zip -rq "$GITHUB_WORKSPACE/dist/${PLUGIN_SLUG}-${VERSION}.zip" "$PLUGIN_SLUG/"
+          echo "Created: dist/${PLUGIN_SLUG}-${VERSION}.zip"
+          ls -lh "$GITHUB_WORKSPACE/dist/"
+
+      # ── Create GitHub Release ────────────────────────────────────────────────
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "RB App Foundry v${{ steps.version.outputs.version }}"
+          body_path: release_notes.md
+          prerelease: ${{ steps.version.outputs.prerelease }}
+          files: dist/rb-app-foundry-*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
