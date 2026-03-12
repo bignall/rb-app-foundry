@@ -1,0 +1,52 @@
+name: Feature Request
+description: Suggest a new framework feature or API improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got an idea for the framework? We want to hear it — especially if you're building an add-on or connection and hit a wall.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area does this relate to?
+      options:
+        - Add-on system / lifecycle
+        - Connection / auth system
+        - New AuthType
+        - REST API
+        - CPT / Taxonomy abstractions
+        - React admin panel / settings fields
+        - Developer tooling / CLI
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: What are you trying to build, and what's stopping you?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the feature you'd like
+      description: What should the API look like? What interface, method, or hook would you want?
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Current workaround
+      description: How are you solving this today, if at all?
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Code examples, links to similar patterns in other frameworks, or mockups.

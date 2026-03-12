@@ -1,0 +1,102 @@
+name: Bug Report
+description: Something in the framework isn't working as expected
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please include as much detail as you can.
+
+        > **Security issue?** Please do not open a public issue. Email [support@rbcreativesolutions.net](mailto:support@rbcreativesolutions.net) instead.
+
+  - type: input
+    id: appfoundry-version
+    attributes:
+      label: RB App Foundry version
+      placeholder: "e.g. 0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: dependent-plugin
+    attributes:
+      label: Dependent plugin (if applicable)
+      description: Which plugin built on RB App Foundry are you using?
+      placeholder: "e.g. RB SocialPillar 0.1.0, or 'none / testing framework directly'"
+
+  - type: input
+    id: wp-version
+    attributes:
+      label: WordPress version
+      placeholder: "e.g. 6.7.2"
+    validations:
+      required: true
+
+  - type: input
+    id: php-version
+    attributes:
+      label: PHP version
+      placeholder: "e.g. 8.2"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the framework is affected?
+      options:
+        - Add-on system (discovery, activation, booting)
+        - Connection management
+        - Credential encryption / storage
+        - OAuth flow
+        - REST API
+        - React admin panel
+        - CPT / Taxonomy abstractions
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Register an add-on path with addPath()
+        2. Create addon.json with ...
+        3. Activate the add-on
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-message
+    attributes:
+      label: Error message or log output
+      render: text
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Relevant code
+      description: Add-on class, connection class, or addon.json that demonstrates the issue.
+      render: php
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
