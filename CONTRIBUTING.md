@@ -206,8 +206,8 @@ If a PR is not the right fit, feedback will be given so you can adjust or close 
    ```
    Then update the comparison links at the bottom of the file:
    ```markdown
-   [Unreleased]: https://github.com/bignall/app-forge/compare/v0.2.0...HEAD
-   [0.2.0]: https://github.com/bignall/app-forge/compare/v0.1.0...v0.2.0
+   [Unreleased]: https://github.com/bignall/rb-app-foundry/compare/v0.2.0...HEAD
+   [0.2.0]: https://github.com/bignall/rb-app-foundry/compare/v0.1.0...v0.2.0
    ```
 
 2. **Bump the version** in `rb-app-foundry.php` (the `Version:` plugin header) and in `readme.txt` (`Stable tag:`).
