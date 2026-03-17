@@ -1,0 +1,14 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    bootstrapFiles:
+        - tests/Stubs/WordPress.php
+    ignoreErrors:
+        - '#Constant ABSPATH not found#'
+        - '#Constant APPFOUNDRY_VERSION not found#'
+        - '#Constant APPFOUNDRY_PATH not found#'
+        - '#Constant APPFOUNDRY_URL not found#'
+        - '#Constant AUTH_KEY not found#'
+        - '#Constant SECURE_AUTH_KEY not found#'
+        - '#Constant WP_DEBUG not found#'

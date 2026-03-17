@@ -11,6 +11,7 @@ Thank you for your interest in contributing! RB App Foundry is the framework tha
 - [Development Setup](#development-setup)
 - [Branch & Commit Conventions](#branch--commit-conventions)
 - [Code Standards](#code-standards)
+- [Testing](#testing)
 - [Backwards Compatibility](#backwards-compatibility)
 - [Submitting a Pull Request](#submitting-a-pull-request)
 - [What to Expect](#what-to-expect)
@@ -155,6 +156,52 @@ composer lint:fix   # or: ./vendor/bin/phpcbf
 
 ---
 
+## Testing
+
+PRs that add new behaviour are expected to include tests. See [`docs/testing.md`](docs/testing.md) for the full testing guide, including manual checklists for things that can't be automated.
+
+### Running the PHP test suite
+
+```bash
+composer test          # PHPUnit (no WordPress install needed)
+composer analyse       # PHPStan static analysis (level 5)
+```
+
+Tests live in `tests/Unit/` and are organised to mirror `src/`:
+
+```
+tests/
+├── Unit/
+│   ├── Admin/        # e.g. SettingsManagerTest.php
+│   ├── Connection/   # e.g. ConnectionResponseTest.php, ConnectionAbstractTest.php
+│   └── Addon/        # e.g. AddonManagerTest.php
+├── Stubs/            # Lightweight WP class stubs (WP_Error, etc.)
+└── WPTestCase.php    # Base class — extend this to get Brain\Monkey WP stubs
+```
+
+**What to test:**
+
+- Pure logic (ConnectionResponse, AuthType, SettingsManager dot-notation) — no WordPress mocking needed
+- Classes that call WP functions — extend `WPTestCase`; use `Brain\Monkey\Functions\when()` to stub `get_option`, `update_option`, `do_action`, etc.
+- Classes that make HTTP calls — use the **testable-subclass pattern**: override `httpRequest()`, `storeCredentials()`, and `getStoredCredentials()` in a concrete subclass defined inside the test file
+- Classes with private state — use `ReflectionClass` to set private properties
+
+**What not to automate** (cover in the PR description instead):
+
+- OAuth flows that require a live browser session
+- Actual API calls to third-party platforms
+- WordPress plugin activation/deactivation behaviour
+
+### Writing tests for a new connection
+
+If you are adding a new connection class (e.g. `InstagramConnection`):
+
+1. Create `tests/Unit/Connection/InstagramConnectionTest.php`
+2. Define a testable subclass inside the file that overrides `httpRequest`, `getStoredCredentials`, and `storeCredentials`
+3. Test at minimum: `getId`, `isConnected` (connected and not connected), `authenticate` (success + failure), the publish method (success + error paths), and any non-trivial credential-management methods
+
+---
+
 ## Backwards Compatibility
 
 RB App Foundry is a framework. Dependent plugins rely on its interfaces, hooks, and REST API contracts. Any change that could break a dependent plugin requires:
@@ -173,11 +220,13 @@ If you are unsure whether a change is breaking, open an issue or PR for discussi
 
 1. Fork the repository and create your branch from `develop`
 2. Make your changes, following the code standards above
-3. If the React admin is affected, rebuild and commit `admin/build/`
-4. Write or update any relevant documentation in `docs/`
-5. Test your changes with at least one dependent plugin active (e.g. RB SocialPillar)
-6. Push your branch and open a PR against `develop` (not `main`)
-7. Fill out the PR description — what changed, why, any backwards-compatibility implications, and how you tested it
+3. Add or update tests — run `composer test` and confirm all tests pass
+4. Run `composer analyse` and resolve any PHPStan errors
+5. If the React admin is affected, rebuild and commit `admin/build/`
+6. Write or update any relevant documentation in `docs/`
+7. Test your changes with at least one dependent plugin active (e.g. RB SocialPillar)
+8. Push your branch and open a PR against `develop` (not `main`)
+9. Fill out the PR description — what changed, why, any backwards-compatibility implications, and how you tested it
 
 PRs that add new framework interfaces or REST endpoints should update `docs/developer/overview.md` and — where applicable — the corresponding docs in RB SocialPillar.
 
